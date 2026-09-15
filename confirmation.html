@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<!-- This is Cory Foraker's work in progress web page for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | Confirm Information</title>
+
+    <style>
+        /* I utilized AI to help format this CSS, and I further customized it to meet my needs. */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a {
+            display: block;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area {
+            padding: 30px 20px;
+        }
+
+        /* Confirmation Page Styling */
+
+        .confirmation-box {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .confirmation-row {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .confirmation-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirmation-label {
+            padding: 12px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #20241E;
+        }
+
+        .confirmation-value {
+            padding: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .message-value {
+            white-space: pre-wrap;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            color: #20241E;
+            background-color: #fff;
+            border: 2px solid #20241E;
+        }
+
+        .edit-button:hover,
+        .edit-button:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            border-color: #C89B32;
+        }
+
+        .confirm-button {
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+        }
+
+        .confirm-button:hover,
+        .confirm-button:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            border-color: #C89B32;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .dropdown-links {
+                position: static;
+                min-width: 0;
+            }
+
+            .confirmation-row {
+                grid-template-columns: 1fr;
+            }
+
+            .confirmation-label {
+                padding-bottom: 6px;
+            }
+
+            .confirmation-value {
+                padding-top: 6px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html" aria-current="page">Assignment 3</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+
+    <!-- Main Content Body -->
+    <main>
+
+        <section class="hero">
+            <h1>Confirm Your Information</h1>
+
+            <p>
+                Please review the information below and verify that everything is correct.
+            </p>
+        </section>
+
+
+        <section class="content-area">
+
+            <div class="confirmation-box">
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Name</div>
+                    <div class="confirmation-value" id="displayName"></div>
+                </div>
+
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Address</div>
+                    <div class="confirmation-value" id="displayAddress"></div>
+                </div>
+
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Phone</div>
+                    <div class="confirmation-value" id="displayPhone"></div>
+                </div>
+
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Email</div>
+                    <div class="confirmation-value" id="displayEmail"></div>
+                </div>
+
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Birth Date</div>
+                    <div class="confirmation-value" id="displayBirthdate"></div>
+                </div>
+
+
+                <div class="confirmation-row">
+                    <div class="confirmation-label">Message</div>
+                    <div
+                        class="confirmation-value message-value"
+                        id="displayMessage"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    id="editButton"
+                    class="edit-button"
+                >
+                    Edit Information
+                </button>
+
+
+                <button
+                    type="button"
+                    id="confirmButton"
+                    class="confirm-button"
+                >
+                    Confirm & Send
+                </button>
+
+            </div>
+
+
+            <!--
+                This form is submitted through the user's email program
+                after the information has been confirmed.
+            -->
+
+            <form
+                id="emailForm"
+                action="mailto:cory_foraker@daytonastate.edu?subject=Website%20Form%20Submission"
+                method="post"
+                enctype="text/plain"
+                class="hidden"
+            >
+
+                <input
+                    type="hidden"
+                    name="Name"
+                    id="emailName"
+                >
+
+                <input
+                    type="hidden"
+                    name="Address"
+                    id="emailAddress"
+                >
+
+                <input
+                    type="hidden"
+                    name="Phone"
+                    id="emailPhone"
+                >
+
+                <input
+                    type="hidden"
+                    name="Email"
+                    id="emailEmail"
+                >
+
+                <input
+                    type="hidden"
+                    name="Birth Date"
+                    id="emailBirthdate"
+                >
+
+                <input
+                    type="hidden"
+                    name="Message"
+                    id="emailMessage"
+                >
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>Website created by Cory Foraker for the Web Systems course at Daytona State College.</p>
+    </footer>
+
+
+    <script>
+// I utilized ChatGPT 5.6 Sol entirely for this part as I was having some troubles figuring out how to effectively format and save this data 
+        const savedData = sessionStorage.getItem("formData"); 
+	
+
+
+        // Sends the user back to the form if no saved data exists.
+        if (!savedData) {
+
+            window.location.href = "assignment3.html";
+
+        }
+
+        else {
+
+            const data = JSON.parse(savedData);
+
+
+            // Creates the full address.
+            const fullAddress =
+                data.address +
+                ", " +
+                data.city +
+                ", " +
+                data.state +
+                " " +
+                data.zip;
+
+
+            // Displays the information entered by the user.
+            document.getElementById("displayName").textContent =
+                data.firstname + " " + data.lastname;
+
+
+            document.getElementById("displayAddress").textContent =
+                fullAddress;
+
+
+            document.getElementById("displayPhone").textContent =
+                data.phone;
+
+
+            document.getElementById("displayEmail").textContent =
+                data.email;
+
+
+            // Formats the birth date for easier reading.
+            const birthday =
+                new Date(data.birthdate + "T00:00:00");
+
+
+            document.getElementById("displayBirthdate").textContent =
+                birthday.toLocaleDateString(
+                    "en-US",
+                    {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    }
+                );
+
+
+            document.getElementById("displayMessage").textContent =
+                data.message;
+
+
+            // Places the data into the hidden email form.
+            document.getElementById("emailName").value =
+                data.firstname + " " + data.lastname;
+
+
+            document.getElementById("emailAddress").value =
+                fullAddress;
+
+
+            document.getElementById("emailPhone").value =
+                data.phone;
+
+
+            document.getElementById("emailEmail").value =
+                data.email;
+
+
+            document.getElementById("emailBirthdate").value =
+                data.birthdate;
+
+
+            document.getElementById("emailMessage").value =
+                data.message;
+
+
+            // Returns the user to the original form to make corrections.
+            document.getElementById("editButton").addEventListener(
+                "click",
+                function () {
+
+                    window.location.href = "assignment3.html";
+
+                }
+            );
+
+
+            // Sends the confirmed information using mailto.
+            document.getElementById("confirmButton").addEventListener(
+                "click",
+                function () {
+
+                    document.getElementById("emailForm").submit();
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

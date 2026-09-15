@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+<!-- This is Cory Foraker's work in progress web page for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | Assignment 3</title>
+
+    <style>
+        /* I utilized AI to help format this CSS, and I further customized it to meet my needs. */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a {
+            display: block;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area {
+            padding: 30px 20px;
+        }
+
+        /* Form Styling */
+
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            padding: 20px;
+        }
+
+        legend {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #20241E;
+            padding: 0 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #C89B32;
+            border-color: #20241E;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .required {
+            color: #a00000;
+        }
+
+        .form-note {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .error {
+            display: block;
+            min-height: 20px;
+            margin-top: 5px;
+            color: #a00000;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-button:hover,
+        .submit-button:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            border-color: #C89B32;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .dropdown-links {
+                position: static;
+                min-width: 0;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html" aria-current="page">Assignment 3</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+
+    <!-- Main Content Body -->
+    <main>
+
+        <section class="hero">
+            <h1>Contact Form</h1>
+
+            <p>
+                Please complete the information below. All fields are required.
+            </p>
+        </section>
+
+
+        <section class="content-area">
+
+				<!--- ChatGPT 5.6 Sol gave me the idea to use novalidate/JS on this form. Happy with how it turned out -->
+            <form id="contactForm" novalidate> 
+
+                <!-- Name -->
+                <fieldset>
+                    <legend>Personal Information</legend>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="firstname">
+                                First Name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="firstname"
+                                autocomplete="given-name"
+                                required
+                            >
+
+                            <span class="error" id="firstnameError"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="lastname">
+                                Last Name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                autocomplete="family-name"
+                                required
+                            >
+
+                            <span class="error" id="lastnameError"></span>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+
+                <!-- Mailing Address -->
+                <fieldset>
+                    <legend>Mailing Address</legend>
+
+                    <div class="form-group">
+                        <label for="address">
+                            Street Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            autocomplete="street-address"
+                            placeholder="123 Main Street"
+                            required
+                        >
+
+                        <span class="error" id="addressError"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="city">
+                            City
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            autocomplete="address-level2"
+                            required
+                        >
+
+                        <span class="error" id="cityError"></span>
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="state">
+                                State
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                id="state"
+                                name="state"
+                                autocomplete="address-level1"
+                                required
+                            >
+                                <option value="">Select State</option>
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DE">Delaware</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="HI">Hawaii</option>
+                                <option value="ID">Idaho</option>
+                                <option value="IL">Illinois</option>
+                                <option value="IN">Indiana</option>
+                                <option value="IA">Iowa</option>
+                                <option value="KS">Kansas</option>
+                                <option value="KY">Kentucky</option>
+                                <option value="LA">Louisiana</option>
+                                <option value="ME">Maine</option>
+                                <option value="MD">Maryland</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MI">Michigan</option>
+                                <option value="MN">Minnesota</option>
+                                <option value="MS">Mississippi</option>
+                                <option value="MO">Missouri</option>
+                                <option value="MT">Montana</option>
+                                <option value="NE">Nebraska</option>
+                                <option value="NV">Nevada</option>
+                                <option value="NH">New Hampshire</option>
+                                <option value="NJ">New Jersey</option>
+                                <option value="NM">New Mexico</option>
+                                <option value="NY">New York</option>
+                                <option value="NC">North Carolina</option>
+                                <option value="ND">North Dakota</option>
+                                <option value="OH">Ohio</option>
+                                <option value="OK">Oklahoma</option>
+                                <option value="OR">Oregon</option>
+                                <option value="PA">Pennsylvania</option>
+                                <option value="RI">Rhode Island</option>
+                                <option value="SC">South Carolina</option>
+                                <option value="SD">South Dakota</option>
+                                <option value="TN">Tennessee</option>
+                                <option value="TX">Texas</option>
+                                <option value="UT">Utah</option>
+                                <option value="VT">Vermont</option>
+                                <option value="VA">Virginia</option>
+                                <option value="WA">Washington</option>
+                                <option value="WV">West Virginia</option>
+                                <option value="WI">Wisconsin</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="DC">District of Columbia</option>
+                            </select>
+
+                            <span class="error" id="stateError"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="zip">
+                                ZIP Code
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="zip"
+                                name="zip"
+                                autocomplete="postal-code"
+                                inputmode="numeric"
+                                maxlength="10"
+                                placeholder="12345"
+                                required
+                            >
+
+                            <span class="error" id="zipError"></span>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+
+                <!-- Contact Information -->
+                <fieldset>
+                    <legend>Contact Information</legend>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="phone">
+                                Phone Number
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                autocomplete="tel"
+                                inputmode="numeric"
+                                maxlength="13"
+                                placeholder="(000)000-0000"
+                                required
+                            >
+
+                            <div class="form-note">
+                                Format: (000)000-0000
+                            </div>
+
+                            <span class="error" id="phoneError"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="email">
+                                Email Address
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                autocomplete="email"
+                                placeholder="name@example.com"
+                                required
+                            >
+
+                            <span class="error" id="emailError"></span>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+
+                <!-- Birth Date and Message -->
+                <fieldset>
+                    <legend>Additional Information</legend>
+
+                    <div class="form-group">
+                        <label for="birthdate">
+                            Birth Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="birthdate"
+                            name="birthdate"
+                            autocomplete="bday"
+                            required
+                        >
+
+                        <span class="error" id="birthdateError"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="message">
+                            Message
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="Enter your message here..."
+                            required
+                        ></textarea>
+
+                        <span class="error" id="messageError"></span>
+                    </div>
+
+                </fieldset>
+
+
+                <!-- Security Question -->
+                <fieldset>
+                    <legend>Security Confirmation</legend>
+
+                    <div class="form-group">
+
+                        <label for="confirm" id="securityQuestion">
+                            Security Question
+                        </label>
+
+                        <input
+                            type="number"
+                            id="confirm"
+                            name="confirm"
+                            required
+                        >
+
+                        <div class="form-note">
+                            This question helps verify that you are a human. (I know, these are dumb)
+                        </div>
+
+                        <span class="error" id="confirmError"></span>
+
+                    </div>
+
+                </fieldset>
+
+
+                <button type="submit" class="submit-button">
+                    Review Information
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>Website created by Cory Foraker for the Web Systems course at Daytona State College.</p>
+    </footer>
+
+
+    <script> 
+	// I utilized ChatGPT 5.6 Sol entirely for this part as I was having some troubles figuring out how to effectively format and save this data 
+
+        const form = document.getElementById("contactForm");
+        const phone = document.getElementById("phone");
+        const birthdate = document.getElementById("birthdate");
+
+        let securityAnswer;
+
+
+        // Sets today's date as the latest possible birth date.
+        function getLocalDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+
+            return year + "-" + month + "-" + day;
+        }
+
+        birthdate.max = getLocalDateString(new Date());
+
+
+        // Creates a simple random math question.
+        function createSecurityQuestion() {
+            const number1 = Math.floor(Math.random() * 9) + 1;
+            const number2 = Math.floor(Math.random() * 9) + 1;
+
+            securityAnswer = number1 + number2;
+
+            document.getElementById("securityQuestion").textContent =
+                "Security Question: What is " + number1 + " + " + number2 + "?";
+        }
+
+        createSecurityQuestion();
+
+
+        // Phone number input mask.
+        phone.addEventListener("input", function () {
+
+            let numbers = phone.value.replace(/\D/g, "");
+
+            numbers = numbers.substring(0, 10);
+
+            if (numbers.length === 0) {
+                phone.value = "";
+            }
+
+            else if (numbers.length <= 3) {
+                phone.value = "(" + numbers;
+            }
+
+            else if (numbers.length <= 6) {
+                phone.value =
+                    "(" +
+                    numbers.substring(0, 3) +
+                    ")" +
+                    numbers.substring(3);
+            }
+
+            else {
+                phone.value =
+                    "(" +
+                    numbers.substring(0, 3) +
+                    ")" +
+                    numbers.substring(3, 6) +
+                    "-" +
+                    numbers.substring(6);
+            }
+
+        });
+
+
+        // Restores data if the user returns from the confirmation page.
+        const savedData = sessionStorage.getItem("formData");
+
+        if (savedData) {
+
+            const data = JSON.parse(savedData);
+
+            document.getElementById("firstname").value = data.firstname || "";
+            document.getElementById("lastname").value = data.lastname || "";
+            document.getElementById("address").value = data.address || "";
+            document.getElementById("city").value = data.city || "";
+            document.getElementById("state").value = data.state || "";
+            document.getElementById("zip").value = data.zip || "";
+            document.getElementById("phone").value = data.phone || "";
+            document.getElementById("email").value = data.email || "";
+            document.getElementById("birthdate").value = data.birthdate || "";
+            document.getElementById("message").value = data.message || "";
+
+        }
+
+
+        // Displays a validation error.
+        function showError(fieldName, message) {
+            document.getElementById(fieldName + "Error").textContent = message;
+        }
+
+
+        // Clears validation messages before checking the form again.
+        function clearErrors() {
+            const errors = document.querySelectorAll(".error");
+
+            errors.forEach(function (error) {
+                error.textContent = "";
+            });
+        }
+
+
+        // Form validation.
+        form.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            clearErrors();
+
+            let valid = true;
+            let firstInvalidField = null;
+
+
+            function markInvalid(field, message) {
+
+                showError(field.id, message);
+
+                valid = false;
+
+                if (firstInvalidField === null) {
+                    firstInvalidField = field;
+                }
+
+            }
+
+
+            const firstname = document.getElementById("firstname");
+            const lastname = document.getElementById("lastname");
+            const address = document.getElementById("address");
+            const city = document.getElementById("city");
+            const state = document.getElementById("state");
+            const zip = document.getElementById("zip");
+            const email = document.getElementById("email");
+            const message = document.getElementById("message");
+            const confirm = document.getElementById("confirm");
+
+
+            // Name validation.
+            const namePattern = /^[A-Za-zÀ-ÿ.' -]+$/;
+
+            if (
+                firstname.value.trim() === "" ||
+                !namePattern.test(firstname.value.trim())
+            ) {
+                markInvalid(
+                    firstname,
+                    "Please enter a valid first name."
+                );
+            }
+
+
+            if (
+                lastname.value.trim() === "" ||
+                !namePattern.test(lastname.value.trim())
+            ) {
+                markInvalid(
+                    lastname,
+                    "Please enter a valid last name."
+                );
+            }
+
+
+            // Address validation.
+            // Requires a street number followed by a street name.
+            const addressPattern = /^\d+[A-Za-z]?(?:-\d+)?\s+.+$/;
+
+            if (!addressPattern.test(address.value.trim())) {
+                markInvalid(
+                    address,
+                    "Please enter a street number and street name."
+                );
+            }
+
+
+            // City validation.
+            const cityPattern = /^[A-Za-zÀ-ÿ.' -]{2,}$/;
+
+            if (!cityPattern.test(city.value.trim())) {
+                markInvalid(
+                    city,
+                    "Please enter a valid city."
+                );
+            }
+
+
+            // State validation.
+            if (state.value === "") {
+                markInvalid(
+                    state,
+                    "Please select a state."
+                );
+            }
+
+
+            // ZIP Code validation.
+            const zipPattern = /^\d{5}(-\d{4})?$/;
+
+            if (!zipPattern.test(zip.value.trim())) {
+                markInvalid(
+                    zip,
+                    "Please enter a valid 5-digit ZIP code or ZIP+4."
+                );
+            }
+
+
+            // Phone number validation.
+            const phonePattern = /^\(\d{3}\)\d{3}-\d{4}$/;
+
+            if (!phonePattern.test(phone.value)) {
+                markInvalid(
+                    phone,
+                    "Please enter a complete 10-digit phone number."
+                );
+            }
+
+
+            // Email validation.
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+            if (!emailPattern.test(email.value.trim())) {
+                markInvalid(
+                    email,
+                    "Please enter a valid email address."
+                );
+            }
+
+
+            // Birth date validation.
+            if (birthdate.value === "") {
+
+                markInvalid(
+                    birthdate,
+                    "Please enter your birth date."
+                );
+
+            }
+
+            else {
+
+                const enteredDate = new Date(
+                    birthdate.value + "T00:00:00"
+                );
+
+                const today = new Date();
+
+                today.setHours(0, 0, 0, 0);
+
+
+                // Future dates are invalid.
+                if (enteredDate > today) {
+
+                    markInvalid(
+                        birthdate,
+                        "Birth date cannot be in the future."
+                    );
+
+                }
+
+                else {
+
+                    let age =
+                        today.getFullYear() -
+                        enteredDate.getFullYear();
+
+                    const monthDifference =
+                        today.getMonth() -
+                        enteredDate.getMonth();
+
+
+                    if (
+                        monthDifference < 0 ||
+                        (
+                            monthDifference === 0 &&
+                            today.getDate() < enteredDate.getDate()
+                        )
+                    ) {
+                        age--;
+                    }
+
+
+                    // Dates more than 120 years ago are treated as unreasonable.
+                    if (age > 120) {
+
+                        markInvalid(
+                            birthdate,
+                            "Please enter a reasonable birth date."
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            // Message validation.
+            if (message.value.trim() === "") {
+
+                markInvalid(
+                    message,
+                    "Please enter a message."
+                );
+
+            }
+
+
+            // Security question validation.
+            if (Number(confirm.value) !== securityAnswer) {
+
+                markInvalid(
+                    confirm,
+                    "The security answer is incorrect."
+                );
+
+            }
+
+
+            // Prevents the user from continuing when information is invalid.
+            if (!valid) {
+
+                firstInvalidField.focus();
+
+                return;
+
+            }
+
+
+            // Saves the form information for the confirmation page.
+            const formData = {
+
+                firstname: firstname.value.trim(),
+                lastname: lastname.value.trim(),
+                address: address.value.trim(),
+                city: city.value.trim(),
+                state: state.value,
+                zip: zip.value.trim(),
+                phone: phone.value,
+                email: email.value.trim(),
+                birthdate: birthdate.value,
+                message: message.value.trim()
+
+            };
+
+
+            sessionStorage.setItem(
+                "formData",
+                JSON.stringify(formData)
+            );
+
+
+            // Opens the confirmation page.
+            window.location.href = "confirmation.html";
+
+        });
+
+    </script>
+
+</body>
+</html>

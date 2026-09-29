@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<!-- This is Cory Foraker's work in progress web page for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | Spirograph</title>
+
+    <style>
+        /* I utilized Gemini AI to help format this CSS, and I further customized it to meet my needs. */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a {
+            display: block;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        button {
+            font: inherit;
+            font-weight: bold;
+            padding: 10px 24px;
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: #C89B32;
+            background-color: #343A30;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #C89B32;
+            outline-offset: 3px;
+        }
+
+        canvas {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            margin: 20px auto 0;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .dropdown-links {
+                position: static;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="spirograph.html" aria-current="page">Spirograph</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        <section class="hero">
+            <h1>Spirograph</h1>
+            <p>
+                This assignment uses JavaScript and the HTML5 canvas
+                to draw a Spirograph.
+            </p>
+        </section>
+
+        <section class="content-area">
+            <h2>Draw a Spirograph</h2>
+            <p>
+                Click Start to draw a pattern using random values for R, r, and O.
+                Clicking Start again clears the canvas and begins a new pattern.
+            </p>
+
+            <button id="startButton" type="button">Start</button>
+
+            <p id="values">R, r, and O will be selected when you start.</p>
+            <p id="status" role="status">Ready to draw.</p>
+
+            <canvas id="spirograph" width="720" height="720"
+                    aria-label="Spirograph drawing">
+                Your browser does not support HTML5 canvas.
+            </canvas>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Website created by Cory Foraker for the Web Systems course at Daytona State College.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById("spirograph");
+        const ctx = canvas.getContext("2d");
+        const values = document.getElementById("values");
+        const statusText = document.getElementById("status");
+
+        let animationId;
+
+        // Find the greatest common divisor to calculate when the pattern repeats.
+        function gcd(a, b) {
+            while (b !== 0) {
+                const remainder = a % b;
+                a = b;
+                b = remainder;
+            }
+
+            return a;
+        }
+
+        function startDrawing() {
+            // Stop any previous animation before starting another.
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Random positive multiples of five keep the drawing inside the canvas.
+            const R = (Math.floor(Math.random() * 13) + 16) * 5; // 80–140
+            const r = (Math.floor(Math.random() * 10) + 4) * 5;  // 20–65
+            const O = (Math.floor(Math.random() * 11) + 2) * 5;  // 10–60
+
+            let t = 0;
+            const increment = 0.01;
+            const endT = 2 * Math.PI * r / gcd(R, r);
+
+            values.textContent = `R = ${R}, r = ${r}, O = ${O}`;
+            statusText.textContent = "Drawing...";
+
+            ctx.strokeStyle = "#20241E";
+            ctx.lineWidth = 1.5;
+            ctx.lineJoin = "round";
+
+            function getPoint(t) {
+                // Equations supplied in the assignment.
+                const x = (R + r) * Math.cos(t)
+                    - (r + O) * Math.cos(((R + r) / r) * t);
+
+                const y = (R + r) * Math.sin(t)
+                    - (r + O) * Math.sin(((R + r) / r) * t);
+
+                // Center the drawing on the canvas.
+                return {
+                    x: canvas.width / 2 + x,
+                    y: canvas.height / 2 + y
+                };
+            }
+
+            let previous = getPoint(0);
+
+            function draw() {
+                ctx.beginPath();
+                ctx.moveTo(previous.x, previous.y);
+
+                // Draw a short section each frame so the pattern appears gradually.
+                for (let i = 0; i < 20 && t < endT; i++) {
+                    t = Math.min(t + increment, endT);
+
+                    const current = getPoint(t);
+                    ctx.lineTo(current.x, current.y);
+                    previous = current;
+                }
+
+                ctx.stroke();
+
+                if (t < endT) {
+                    animationId = requestAnimationFrame(draw);
+                } else {
+                    statusText.textContent =
+                        "Complete. Click Start to draw another pattern.";
+                }
+            }
+
+            animationId = requestAnimationFrame(draw);
+        }
+
+        document.getElementById("startButton")
+            .addEventListener("click", startDrawing);
+    </script>
+
+</body>
+</html>

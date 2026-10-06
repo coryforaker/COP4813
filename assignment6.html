@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<!-- This is Cory Foraker's work in progress web page for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | 2024 NFL Scores</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a, nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover, nav a:focus-visible,
+        nav summary:hover, nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown { position: relative; }
+        .dropdown summary { cursor: pointer; }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a { display: block; }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area { padding: 30px 20px; }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .filter-group { flex: 1 1 220px; }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        select, button {
+            box-sizing: border-box;
+            font: inherit;
+            padding: 10px 14px;
+            border-radius: 4px;
+        }
+
+        select {
+            width: 100%;
+            color: #333;
+            background: #fff;
+            border: 1px solid #777;
+        }
+
+        button {
+            font-weight: bold;
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            cursor: pointer;
+        }
+
+        button:hover { color: #C89B32; background-color: #343A30; }
+        button:disabled, select:disabled { opacity: 0.6; cursor: wait; }
+
+        button:focus-visible, select:focus-visible, .table-container:focus-visible {
+            outline: 3px solid #C89B32;
+            outline-offset: 3px;
+        }
+
+        .table-container { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+            font-variant-numeric: tabular-nums;
+        }
+
+        caption { padding: 0 0 12px; text-align: left; }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        thead { color: #fff; background-color: #20241E; }
+        tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        tbody tr:hover { background-color: #f5efdf; }
+        .score { text-align: center; }
+        .game-date { white-space: nowrap; }
+        .game-note { display: block; max-width: 240px; margin-top: 6px; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; }
+            nav { width: 100%; flex-direction: column; align-items: stretch; }
+            .dropdown-links { position: static; min-width: 0; }
+            main { margin: 20px 10px; padding: 0 10px; }
+            .hero, .content-area { padding: 24px 10px; }
+            .filters button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html">Assignment 3</a></li>
+                    <li><a href="assignment4.html">Assignment 4</a></li>
+                    <li><a href="assignment5.html">Assignment 5</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        <section class="hero">
+            <h1>2024 NFL Scores</h1>
+            <p>
+                Explore scores from the 2024 NFL season, including preseason,
+                the regular season, and playoffs through February 2025.
+            </p>
+        </section>
+
+        <section class="content-area" aria-labelledby="scores-heading">
+            <h2 id="scores-heading">Game Results</h2>
+            <p>Browse all games or filter the results by team and game type.</p>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="teamFilter">Team</label>
+                    <select id="teamFilter" disabled>
+                        <option value="">All teams</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="typeFilter">Game type</label>
+                    <select id="typeFilter" disabled>
+                        <option value="">All game types</option>
+                        <option value="PRE">Preseason</option>
+                        <option value="REG">Regular season</option>
+                        <option value="WC">Wild Card</option>
+                        <option value="DIV">Divisional</option>
+                        <option value="CON">Conference Championship</option>
+                        <option value="SB">Super Bowl</option>
+                    </select>
+                </div>
+
+                <button id="resetButton" type="button" disabled>Reset Filters</button>
+            </div>
+
+            <p id="status" role="status">Loading scores...</p>
+            <noscript><p>Please enable JavaScript to display the game scores.</p></noscript>
+
+            <div class="table-container" id="tableContainer" tabindex="0"
+                 role="region" aria-labelledby="scores-heading" hidden>
+                <table>
+                    <caption>Winning teams and scores appear in bold. Dates use Eastern Time.</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Round / Week</th>
+                            <th scope="col">Away Team</th>
+                            <th scope="col" class="score">Away Score</th>
+                            <th scope="col">Home Team</th>
+                            <th scope="col" class="score">Home Score</th>
+                            <th scope="col">Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoresBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Website created by Cory Foraker for the Web Systems course at Daytona State College.</p>
+    </footer>
+
+    <script>
+        const teamFilter = document.getElementById("teamFilter");
+        const typeFilter = document.getElementById("typeFilter");
+        const resetButton = document.getElementById("resetButton");
+        const statusText = document.getElementById("status");
+        const scoresBody = document.getElementById("scoresBody");
+        const tableContainer = document.getElementById("tableContainer");
+
+        let games = [];
+
+        // Create table cells using textContent so data is displayed as text.
+        function addCell(row, value, className = "", winner = false) {
+            const cell = document.createElement("td");
+            cell.className = className;
+
+            if (winner) {
+                const strong = document.createElement("strong");
+                strong.textContent = value;
+                cell.appendChild(strong);
+            } else {
+                cell.textContent = value;
+            }
+
+            row.appendChild(cell);
+            return cell;
+        }
+
+        function displayGames() {
+            const selectedTeam = teamFilter.value;
+            const selectedType = typeFilter.value;
+
+            const filteredGames = games.filter(game => {
+                const matchesTeam = selectedTeam === ""
+                    || game.home_team === selectedTeam
+                    || game.away_team === selectedTeam;
+                const matchesType = selectedType === ""
+                    || game.game_type === selectedType;
+
+                return matchesTeam && matchesType;
+            });
+
+            const fragment = document.createDocumentFragment();
+
+            filteredGames.forEach(game => {
+                const row = document.createElement("tr");
+                const awayWon = game.away_score > game.home_score;
+                const homeWon = game.home_score > game.away_score;
+                const round = game.game_type === "REG"
+                    ? `Regular Season - Week ${game.week}` : game.round;
+
+                // Format the date without converting it to a different timezone.
+                const [year, month, day] = game.date.split("-");
+                addCell(row, `${month}/${day}/${year}`, "game-date");
+                const roundCell = addCell(row, round);
+
+                if (game.note) {
+                    const note = document.createElement("small");
+                    note.className = "game-note";
+                    note.textContent = game.note;
+                    roundCell.appendChild(note);
+                }
+
+                addCell(row, game.away_team, "", awayWon);
+                addCell(row, game.away_score, "score", awayWon);
+                addCell(row, game.home_team, "", homeWon);
+                addCell(row, game.home_score, "score", homeWon);
+
+                let result = game.overtime ? "Final (OT)" : "Final";
+                if (game.home_score === game.away_score) result += " - Tie";
+                addCell(row, result);
+                fragment.appendChild(row);
+            });
+
+            if (filteredGames.length === 0) {
+                const row = document.createElement("tr");
+                const cell = addCell(row, "No games match the selected filters.");
+                cell.colSpan = 7;
+                fragment.appendChild(row);
+            }
+
+            scoresBody.replaceChildren(fragment);
+            statusText.textContent = `Showing ${filteredGames.length} of ${games.length} games.`;
+        }
+
+        async function loadScores() {
+            try {
+                // Keep this JSON file in the same folder as this HTML page.
+                const response = await fetch("nfl_2024_season_scores.json");
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                if (!Array.isArray(data.games)) throw new Error("Missing games array.");
+
+                games = data.games.sort((a, b) => a.date.localeCompare(b.date));
+
+                // Build an alphabetical list of teams from the JSON data.
+                const teams = [...new Set(games.flatMap(game =>
+                    [game.home_team, game.away_team]
+                ))].sort();
+
+                teams.forEach(team => teamFilter.add(new Option(team, team)));
+                displayGames();
+                tableContainer.hidden = false;
+                teamFilter.disabled = false;
+                typeFilter.disabled = false;
+                resetButton.disabled = false;
+            } catch (error) {
+                statusText.textContent = "Unable to load scores. Make sure "
+                    + "nfl_2024_season_scores.json is in the same folder as this page, "
+                    + "and open the page through your website or a local web server.";
+                console.error("Could not load NFL scores:", error);
+            }
+        }
+
+        teamFilter.addEventListener("change", displayGames);
+        typeFilter.addEventListener("change", displayGames);
+        resetButton.addEventListener("click", () => {
+            teamFilter.value = "";
+            typeFilter.value = "";
+            displayGames();
+        });
+
+        loadScores();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<!-- Cory Foraker's Assignment 7 for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | Assignment 7 - Drag and Drop</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a {
+            display: block;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        button {
+            font: inherit;
+            font-weight: bold;
+            padding: 10px 24px;
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: #C89B32;
+            background-color: #343A30;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #C89B32;
+            outline-offset: 3px;
+        }
+
+        .card-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 160px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        #hand {
+            background-color: #edf0ea;
+            border: 1px solid #ccd3c7;
+        }
+
+        .card {
+            display: block;
+            width: 90px;
+            height: 126px;
+            border-radius: 7px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+            cursor: grab;
+        }
+
+        .card.dragging {
+            opacity: 0.4;
+        }
+
+        #discardPile {
+            margin-top: 24px;
+            padding: 20px;
+            border: 3px dashed #C89B32;
+            border-radius: 8px;
+            background-color: #fffaf0;
+        }
+
+        #discardPile h2 {
+            margin-top: 0;
+        }
+
+        #discardPile.drag-over {
+            background-color: #f4e4b8;
+            border-color: #20241E;
+        }
+
+        #discardCards .card {
+            cursor: default;
+        }
+
+        #status {
+            min-height: 3.2em;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .dropdown-links {
+                position: static;
+                min-width: 0;
+            }
+
+            .content-area {
+                padding: 20px 0;
+            }
+
+            .card-area {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .card {
+                width: 75px;
+                height: 105px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html">Assignment 3</a></li>
+                    <li><a href="assignment4.html">Assignment 4</a></li>
+                    <li><a href="assignment5.html">Assignment 5</a></li>
+					<li><a href="assignment6.html">Assignment 6</a></li>
+                    <li><a href="assignment7.html" aria-current="page">Assignment 7</a>
+                    </li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        <section class="hero">
+            <h1>Assignment 7 - Drag and Drop</h1>
+            <p>
+                This assignment uses JavaScript and HTML5 drag and drop
+                to deal and discard playing cards.
+            </p>
+        </section>
+
+        <section class="content-area">
+            <h2>Deal Your Hand</h2>
+            <p>
+                Click Deal to receive five cards. Drag any card into the
+                discard pile below to discard it.
+                Clicking Deal again starts a new hand.
+            </p>
+
+            <button id="dealButton" type="button">Deal</button>
+
+            <p id="status" role="status">
+                Click Deal to begin.
+            </p>
+
+            <h2>Your Hand</h2>
+            <div id="hand" class="card-area" aria-label="Your hand"></div>
+
+            <section id="discardPile" aria-labelledby="discardHeading">
+                <h2 id="discardHeading">Discard Pile</h2>
+                <p>Drop cards inside this gold border.</p>
+                <p>Cards discarded: <strong id="discardCount">0</strong></p>
+
+                <div id="discardCards" class="card-area"></div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Website created by Cory Foraker for the Web Systems course
+            at Daytona State College.
+        </p>
+    </footer>
+
+    <script>
+        const hand = document.getElementById("hand");
+        const discardPile = document.getElementById("discardPile");
+        const discardCards = document.getElementById("discardCards");
+        const discardCount = document.getElementById("discardCount");
+        const statusText = document.getElementById("status");
+
+        let draggedCard = null;
+        let discarded = 0;
+
+        // Build a standard deck containing 52 unique cards.
+        function createDeck() {
+            const suits = [
+                { name: "Spades", symbol: "♠", color: "#20241E" },
+                { name: "Clubs", symbol: "♣", color: "#20241E" },
+                { name: "Hearts", symbol: "♥", color: "#b32332" },
+                { name: "Diamonds", symbol: "♦", color: "#b32332" }
+            ];
+
+            const ranks = [
+                "A", "2", "3", "4", "5", "6", "7",
+                "8", "9", "10", "J", "Q", "K"
+            ];
+
+            const deck = [];
+
+            for (const suit of suits) {
+                for (const rank of ranks) {
+                    deck.push({
+                        rank: rank,
+                        suit: suit.name,
+                        symbol: suit.symbol,
+                        color: suit.color
+                    });
+                }
+            }
+
+            return deck;
+        }
+
+        // Shuffle the deck without adding or duplicating cards.
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+
+                const temporary = deck[i];
+                deck[i] = deck[j];
+                deck[j] = temporary;
+            }
+        }
+
+        // Create an SVG image for each card.
+        function createCardImage(card) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="100" height="140" viewBox="0 0 100 140">
+                    <rect x="1" y="1" width="98" height="138"
+                          rx="8" fill="white" stroke="#bbb" stroke-width="2"/>
+
+                    <g fill="${card.color}" font-family="Arial, sans-serif">
+                        <text x="9" y="25" font-size="21"
+                              font-weight="bold">${card.rank}</text>
+
+                        <text x="9" y="45" font-size="20">${card.symbol}</text>
+
+                        <text x="50" y="90" font-size="52"
+                              text-anchor="middle">${card.symbol}</text>
+
+                        <g transform="rotate(180 50 70)">
+                            <text x="9" y="25" font-size="21"
+                                  font-weight="bold">${card.rank}</text>
+                            <text x="9" y="45" font-size="20">${card.symbol}</text>
+                        </g>
+                    </g>
+                </svg>
+            `;
+
+            const image = document.createElement("img");
+
+            image.src = "data:image/svg+xml;charset=utf-8,"
+                + encodeURIComponent(svg);
+
+            image.alt = `${card.rank} of ${card.suit}`;
+            image.className = "card";
+            image.draggable = true;
+
+            image.addEventListener("dragstart", function(event) {
+                draggedCard = image;
+
+                event.dataTransfer.setData("text/plain", image.alt);
+                event.dataTransfer.effectAllowed = "move";
+
+                image.classList.add("dragging");
+            });
+
+            image.addEventListener("dragend", function() {
+                image.classList.remove("dragging");
+                discardPile.classList.remove("drag-over");
+                draggedCard = null;
+            });
+
+            return image;
+        }
+
+        function dealCards() {
+            hand.replaceChildren();
+            discardCards.replaceChildren();
+
+            draggedCard = null;
+            discarded = 0;
+            discardCount.textContent = discarded;
+            discardPile.classList.remove("drag-over");
+
+            const deck = createDeck();
+            shuffleDeck(deck);
+
+            // Remove five different cards from the shuffled deck.
+            for (let i = 0; i < 5; i++) {
+                const card = deck.pop();
+                hand.appendChild(createCardImage(card));
+            }
+
+            statusText.textContent =
+                "Five cards dealt. Drag a card into the discard pile.";
+        }
+
+        // Allow cards from the hand to be dropped here.
+        discardPile.addEventListener("dragover", function(event) {
+            if (draggedCard && draggedCard.parentElement === hand) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "move";
+                discardPile.classList.add("drag-over");
+            }
+        });
+
+        discardPile.addEventListener("dragleave", function(event) {
+            if (!discardPile.contains(event.relatedTarget)) {
+                discardPile.classList.remove("drag-over");
+            }
+        });
+
+        // Capture the drop event, move the image, and confirm the action.
+        discardPile.addEventListener("drop", function(event) {
+            event.preventDefault();
+            discardPile.classList.remove("drag-over");
+
+            if (!draggedCard || draggedCard.parentElement !== hand) {
+                return;
+            }
+
+            const cardName = draggedCard.alt;
+
+            draggedCard.classList.remove("dragging");
+            draggedCard.draggable = false;
+            discardCards.appendChild(draggedCard);
+
+            discarded++;
+            discardCount.textContent = discarded;
+
+            const remaining = hand.children.length;
+
+            statusText.textContent =
+                `Drop event captured: ${cardName} discarded. `
+                + `Cards remaining: ${remaining}.`;
+
+            if (remaining === 0) {
+                statusText.textContent +=
+                    " All cards discarded! Click Deal for a new hand.";
+            }
+
+            draggedCard = null;
+        });
+
+        document.getElementById("dealButton")
+            .addEventListener("click", dealCards);
+    </script>
+
+</body>
+</html>

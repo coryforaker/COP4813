@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+<!-- Cory Foraker's Assignment 9 for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory Foraker | Assignment 9 - Animation</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 180px;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-links a {
+            display: block;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-area {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px 30px;
+            margin: 20px 0;
+            padding: 12px;
+            color: #fff;
+            background-color: #20241E;
+            border-radius: 6px;
+        }
+
+        .stats strong {
+            color: #C89B32;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 20px auto;
+            background-color: #29271f;
+            border-radius: 6px;
+        }
+
+        button {
+            font: inherit;
+            font-weight: bold;
+            padding: 10px 24px;
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: #C89B32;
+            background-color: #343A30;
+        }
+
+        button:focus-visible,
+        canvas:focus-visible {
+            outline: 3px solid #C89B32;
+            outline-offset: 3px;
+        }
+
+        #status {
+            min-height: 3.2em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .dropdown-links {
+                position: static;
+                min-width: 0;
+            }
+
+            .content-area {
+                padding: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="CF Logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="spirograph.html">Spirograph</a></li>
+                    <li><a href="assignment7.html">Assignment 7</a></li>
+                    <li>
+                        <a href="assignment9.html" aria-current="page">
+                            Assignment 9
+                        </a>
+                    </li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        <section class="hero">
+            <h1>Assignment 9 - Animation</h1>
+            <p>
+                An Old School RuneScape-inspired mining animation.
+                Just one more ore before logging off.
+            </p>
+        </section>
+
+        <section class="content-area">
+            <h2>Mining Runite</h2>
+
+            <p id="instructions">
+                Click the rock to make the miner swing the pickaxe.
+                Each successful strike earns 1 ore and 125 Mining XP.
+                Click the bouncing rune nugget for a bonus of
+                3 ore and 375 Mining XP!
+                You can also focus the canvas and press Enter or Space
+                to mine the rock.
+            </p>
+
+            <div class="stats">
+                <span>Ore mined: <strong id="oreCount">0</strong></span>
+                <span>Mining XP: <strong id="xpCount">0</strong></span>
+            </div>
+
+            <canvas id="miningCanvas" width="720" height="420"
+                    tabindex="0"
+                    aria-label="Rune rock mining animation with a bouncing bonus nugget"
+                    aria-describedby="instructions">
+                Your browser does not support HTML5 canvas.
+            </canvas>
+
+            <button id="pauseButton" type="button">Pause</button>
+
+            <p id="status" role="status">
+                Click the rune rock to start mining.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Website created by Cory Foraker for the Web Systems course
+            at Daytona State College.
+        </p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById("miningCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const oreCount = document.getElementById("oreCount");
+        const xpCount = document.getElementById("xpCount");
+        const statusText = document.getElementById("status");
+        const pauseButton = document.getElementById("pauseButton");
+
+        const border = 12;
+
+        const rock = {
+            x: 450,
+            y: 284,
+            flash: 0
+        };
+
+        const miner = {
+            x: 310,
+            shoulderY: 228,
+            swinging: false,
+            swingTime: 0,
+            swingDuration: 0.8,
+            struck: false
+        };
+
+        // The nugget starts moving diagonally.
+        const nugget = {
+            x: 110,
+            y: 85,
+            radius: 12,
+            speedX: 110,
+            speedY: 85
+        };
+
+        let ore = 0;
+        let xp = 0;
+        let paused = false;
+        let lastTime = null;
+
+        const particles = [];
+        const xpDrops = [];
+
+        // Rock outline, measured from the rock's center.
+        const rockShape = new Path2D();
+        rockShape.moveTo(-58, 25);
+        rockShape.lineTo(-48, -20);
+        rockShape.lineTo(-20, -47);
+        rockShape.lineTo(24, -43);
+        rockShape.lineTo(53, -10);
+        rockShape.lineTo(61, 30);
+        rockShape.lineTo(25, 45);
+        rockShape.lineTo(-30, 43);
+        rockShape.closePath();
+
+        function drawBackground() {
+            ctx.fillStyle = "#29271f";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Stone floor.
+            ctx.strokeStyle = "#363328";
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x < canvas.width; x += 60) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < canvas.height; y += 60) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Visible boundary for the bouncing nugget.
+            ctx.strokeStyle = "#C89B32";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(
+                border,
+                border,
+                canvas.width - border * 2,
+                canvas.height - border * 2
+            );
+
+            ctx.fillStyle = "#d7cda9";
+            ctx.font = "18px Georgia, serif";
+            ctx.textAlign = "center";
+            ctx.fillText("Runite Mining", canvas.width / 2, 42);
+        }
+
+        function drawRock() {
+            ctx.save();
+            ctx.translate(rock.x, rock.y);
+
+            ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+            ctx.beginPath();
+            ctx.ellipse(0, 42, 67, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = rock.flash > 0 ? "#dadfcf" : "#696c69";
+            ctx.strokeStyle = "#181b19";
+            ctx.lineWidth = 3;
+            ctx.fill(rockShape);
+            ctx.stroke(rockShape);
+
+            // Darker rock face.
+            ctx.fillStyle = "#454b49";
+            ctx.beginPath();
+            ctx.moveTo(-58, 25);
+            ctx.lineTo(-8, 1);
+            ctx.lineTo(25, 45);
+            ctx.lineTo(-30, 43);
+            ctx.closePath();
+            ctx.fill();
+
+            // Blue-green mineral veins.
+            ctx.strokeStyle = rock.flash > 0 ? "#fff" : "#74c4d0";
+            ctx.lineWidth = 7;
+            ctx.lineCap = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(-25, -25);
+            ctx.lineTo(-10, -10);
+            ctx.lineTo(-18, 10);
+            ctx.moveTo(14, -28);
+            ctx.lineTo(28, -10);
+            ctx.lineTo(15, 8);
+            ctx.lineTo(30, 22);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawLimb(x1, y1, x2, y2, color, width) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.lineCap = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        function getPickaxeAngle() {
+            const restingAngle = -0.95;
+            const raisedAngle = -1.65;
+            const impactAngle = 0.16;
+
+            if (!miner.swinging) {
+                return restingAngle;
+            }
+
+            const progress = miner.swingTime / miner.swingDuration;
+
+            // Lift the pickaxe.
+            if (progress < 0.3) {
+                const amount = progress / 0.3;
+
+                return restingAngle
+                    + (raisedAngle - restingAngle) * amount;
+            }
+
+            // Swing toward the rock.
+            if (progress < 0.6) {
+                const amount = (progress - 0.3) / 0.3;
+
+                return raisedAngle
+                    + (impactAngle - raisedAngle) * amount;
+            }
+
+            // Return to the resting position.
+            const amount = Math.min((progress - 0.6) / 0.4, 1);
+
+            return impactAngle
+                + (restingAngle - impactAngle) * amount;
+        }
+
+        function drawMiner() {
+            const x = miner.x;
+            const shoulderY = miner.shoulderY;
+            const angle = getPickaxeAngle();
+
+            ctx.save();
+
+            // Ground shadow.
+            ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+            ctx.beginPath();
+            ctx.ellipse(x, 332, 43, 10, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Legs and boots.
+            drawLimb(x - 10, 278, x - 19, 321, "#626052", 17);
+            drawLimb(x + 10, 278, x + 22, 321, "#626052", 17);
+            drawLimb(x - 24, 326, x - 5, 326, "#352b22", 12);
+            drawLimb(x + 16, 326, x + 36, 326, "#352b22", 12);
+
+            // Torso.
+            ctx.fillStyle = "#738258";
+            ctx.fillRect(x - 23, 220, 46, 60);
+
+            // Belt and buckle.
+            ctx.fillStyle = "#473727";
+            ctx.fillRect(x - 23, 265, 46, 9);
+
+            ctx.fillStyle = "#C89B32";
+            ctx.fillRect(x - 4, 264, 10, 11);
+
+            // Neck and head.
+            ctx.fillStyle = "#d3a477";
+            ctx.fillRect(x - 7, 207, 15, 18);
+
+            ctx.beginPath();
+            ctx.arc(x, 193, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Nose.
+            ctx.fillRect(x + 17, 190, 11, 9);
+
+            // Hair.
+            ctx.fillStyle = "#493426";
+            ctx.beginPath();
+            ctx.arc(x - 2, 187, 22, Math.PI, Math.PI * 2);
+            ctx.fill();
+            ctx.fillRect(x - 24, 184, 10, 20);
+
+            // Eye.
+            ctx.fillStyle = "#20241E";
+            ctx.fillRect(x + 11, 186, 4, 4);
+
+            // Hands follow the pickaxe handle.
+            const handX = x + Math.cos(angle) * 63;
+            const handY = shoulderY + Math.sin(angle) * 63;
+
+            drawLimb(
+                x + 12, shoulderY,
+                handX, handY,
+                "#d3a477", 12
+            );
+
+            drawLimb(
+                x - 12, shoulderY + 12,
+                handX - 12, handY + 8,
+                "#bd8e64", 11
+            );
+
+            // Rotate the pickaxe around the miner's shoulder.
+            ctx.translate(x, shoulderY);
+            ctx.rotate(angle);
+
+            drawLimb(35, 0, 114, 0, "#906334", 8);
+
+            ctx.strokeStyle = "#8db7bd";
+            ctx.lineWidth = 10;
+            ctx.lineCap = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(105, -30);
+            ctx.quadraticCurveTo(132, 0, 105, 32);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawNugget() {
+            ctx.save();
+            ctx.translate(nugget.x, nugget.y);
+
+            ctx.fillStyle = "#74c4d0";
+            ctx.strokeStyle = "#24454b";
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.moveTo(-10, -5);
+            ctx.lineTo(-3, -11);
+            ctx.lineTo(8, -7);
+            ctx.lineTo(11, 3);
+            ctx.lineTo(3, 10);
+            ctx.lineTo(-9, 7);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#b9e5e9";
+            ctx.fillRect(-3, -5, 5, 5);
+
+            ctx.restore();
+        }
+
+        function updateNugget(deltaTime) {
+            nugget.x += nugget.speedX * deltaTime;
+            nugget.y += nugget.speedY * deltaTime;
+
+            const left = border + nugget.radius + 2;
+            const right = canvas.width - left;
+            const top = border + nugget.radius + 2;
+            const bottom = canvas.height - top;
+
+            // Reverse horizontal direction at the side boundaries.
+            if (nugget.x >= right) {
+                nugget.x = right;
+                nugget.speedX = -Math.abs(nugget.speedX);
+            } else if (nugget.x <= left) {
+                nugget.x = left;
+                nugget.speedX = Math.abs(nugget.speedX);
+            }
+
+            // Reverse vertical direction at the top and bottom.
+            if (nugget.y >= bottom) {
+                nugget.y = bottom;
+                nugget.speedY = -Math.abs(nugget.speedY);
+            } else if (nugget.y <= top) {
+                nugget.y = top;
+                nugget.speedY = Math.abs(nugget.speedY);
+            }
+        }
+
+        function updateTotals() {
+            oreCount.textContent = ore;
+            xpCount.textContent = xp.toLocaleString();
+        }
+
+        function startMining() {
+            if (paused) {
+                statusText.textContent = "Click Resume to continue mining.";
+                return;
+            }
+
+            if (miner.swinging) {
+                return;
+            }
+
+            miner.swinging = true;
+            miner.swingTime = 0;
+            miner.struck = false;
+
+            statusText.textContent = "You swing your pickaxe at the rock.";
+        }
+
+        function strikeRock() {
+            ore++;
+            xp += 125;
+            updateTotals();
+
+            rock.flash = 0.2;
+
+            // Fragments appear at the point of impact.
+            for (let i = 0; i < 12; i++) {
+                particles.push({
+                    x: rock.x - 37,
+                    y: rock.y - 37,
+                    speedX: (Math.random() - 0.5) * 180,
+                    speedY: -70 - Math.random() * 120,
+                    life: 0.7
+                });
+            }
+
+            xpDrops.push({
+                x: rock.x,
+                y: rock.y - 65,
+                text: "+125 Mining XP",
+                life: 1.2
+            });
+
+            statusText.textContent =
+                "You mine some runite ore! +125 Mining XP.";
+        }
+
+        function collectBonus() {
+            ore += 3;
+            xp += 375;
+            updateTotals();
+
+            // Display the reward where the nugget was caught.
+            xpDrops.push({
+                x: nugget.x,
+                y: nugget.y - 20,
+                text: "+3 ore / +375 XP!",
+                life: 1.2
+            });
+
+            statusText.textContent =
+                "You caught the rune nugget! Bonus: 3 ore and 375 Mining XP!";
+
+            // Move the nugget to a new position inside the boundary.
+            const padding = border + nugget.radius + 2;
+
+            nugget.x = padding
+                + Math.random() * (canvas.width - padding * 2);
+
+            nugget.y = padding
+                + Math.random() * (canvas.height - padding * 2);
+
+            nugget.speedX *= -1;
+            nugget.speedY *= -1;
+        }
+
+        function updateMining(deltaTime) {
+            rock.flash = Math.max(0, rock.flash - deltaTime);
+
+            if (!miner.swinging) {
+                return;
+            }
+
+            miner.swingTime += deltaTime;
+
+            // Award ore only once per swing, at the moment of impact.
+            if (!miner.struck
+                    && miner.swingTime >= miner.swingDuration * 0.6) {
+                miner.struck = true;
+                strikeRock();
+            }
+
+            if (miner.swingTime >= miner.swingDuration) {
+                miner.swinging = false;
+                miner.swingTime = 0;
+            }
+        }
+
+        function updateEffects(deltaTime) {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+
+                particle.x += particle.speedX * deltaTime;
+                particle.y += particle.speedY * deltaTime;
+                particle.speedY += 280 * deltaTime;
+                particle.life -= deltaTime;
+
+                if (particle.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            for (let i = xpDrops.length - 1; i >= 0; i--) {
+                xpDrops[i].y -= 35 * deltaTime;
+                xpDrops[i].life -= deltaTime;
+
+                if (xpDrops[i].life <= 0) {
+                    xpDrops.splice(i, 1);
+                }
+            }
+        }
+
+        function drawEffects() {
+            ctx.save();
+
+            // Keep effects inside the visible boundary.
+            ctx.beginPath();
+            ctx.rect(
+                border + 2,
+                border + 2,
+                canvas.width - (border + 2) * 2,
+                canvas.height - (border + 2) * 2
+            );
+            ctx.clip();
+
+            for (const particle of particles) {
+                ctx.globalAlpha = Math.max(0, particle.life / 0.7);
+                ctx.fillStyle = "#74c4d0";
+                ctx.fillRect(particle.x, particle.y, 5, 5);
+            }
+
+            ctx.font = "bold 20px Georgia, serif";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#ffe283";
+
+            for (const drop of xpDrops) {
+                ctx.globalAlpha = Math.min(1, Math.max(0, drop.life));
+
+                // Keep reward text readable near the canvas edges.
+                const halfWidth = ctx.measureText(drop.text).width / 2;
+                const padding = border + 8;
+
+                const textX = Math.max(
+                    padding + halfWidth,
+                    Math.min(canvas.width - padding - halfWidth, drop.x)
+                );
+
+                const textY = Math.max(
+                    border + 28,
+                    Math.min(canvas.height - border - 10, drop.y)
+                );
+
+                ctx.fillText(drop.text, textX, textY);
+            }
+
+            ctx.restore();
+        }
+
+        // Account for the canvas being resized by CSS.
+        function getMousePosition(event) {
+            const rectangle = canvas.getBoundingClientRect();
+
+            return {
+                x: (event.clientX - rectangle.left)
+                    * canvas.width / rectangle.width,
+                y: (event.clientY - rectangle.top)
+                    * canvas.height / rectangle.height
+            };
+        }
+
+        function isOnRock(position) {
+            return ctx.isPointInPath(
+                rockShape,
+                position.x - rock.x,
+                position.y - rock.y
+            );
+        }
+
+        function isOnNugget(position) {
+            const distance = Math.hypot(
+                position.x - nugget.x,
+                position.y - nugget.y
+            );
+
+            return distance <= nugget.radius;
+        }
+
+        canvas.addEventListener("click", function(event) {
+            if (paused) {
+                statusText.textContent = "Click Resume to continue mining.";
+                return;
+            }
+
+            const position = getMousePosition(event);
+
+            // Check the nugget first because it can pass over the rock.
+            if (isOnNugget(position)) {
+                collectBonus();
+            } else if (isOnRock(position)) {
+                startMining();
+            }
+        });
+
+        canvas.addEventListener("mousemove", function(event) {
+            const position = getMousePosition(event);
+
+            const clickable = !paused
+                && (isOnRock(position) || isOnNugget(position));
+
+            canvas.style.cursor = clickable ? "pointer" : "default";
+        });
+
+        // Keyboard alternative for mining the stationary rock.
+        canvas.addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+
+                if (!event.repeat) {
+                    startMining();
+                }
+            }
+        });
+
+        pauseButton.addEventListener("click", function() {
+            paused = !paused;
+            pauseButton.textContent = paused ? "Resume" : "Pause";
+            canvas.style.cursor = "default";
+
+            statusText.textContent = paused
+                ? "Animation paused."
+                : "Animation resumed. Mine the rock or catch the bonus nugget!";
+        });
+
+        function animate(timestamp) {
+            if (lastTime === null) {
+                lastTime = timestamp;
+            }
+
+            // Elapsed time keeps movement consistent across refresh rates.
+            const deltaTime = Math.min(
+                (timestamp - lastTime) / 1000,
+                0.04
+            );
+
+            lastTime = timestamp;
+
+            if (!paused) {
+                updateNugget(deltaTime);
+                updateMining(deltaTime);
+                updateEffects(deltaTime);
+            }
+
+            drawBackground();
+            drawRock();
+            drawMiner();
+            drawNugget();
+            drawEffects();
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+
+</body>
+</html>

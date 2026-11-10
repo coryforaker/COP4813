@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+<!-- Cory Foraker's Assignment 11 for Web Systems at DSC -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="An interactive BSIT course planner with prerequisite checks, course notes, and drag-and-drop planning.">
+
+    <title>Cory Foraker | Assignment 11 - Dynamic Objects</title>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            color: #333;
+            background-color: #f9f9f9;
+            overflow-wrap: break-word;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        header {
+            background-color: #20241E;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            min-height: 44px;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 4px;
+        }
+
+        nav > a,
+        .dropdown-links a {
+            display: block;
+        }
+
+        nav a:hover,
+        nav summary:hover,
+        nav a:focus-visible,
+        nav summary:focus-visible {
+            color: #C89B32;
+            background-color: #343A30;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            width: 230px;
+            max-width: calc(100vw - 32px);
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241E;
+            border: 1px solid #C89B32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        main {
+            width: calc(100% - 32px);
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            line-height: 1.3;
+        }
+
+        .content-area {
+            padding: 24px 20px;
+        }
+
+        .notice {
+            padding: 16px;
+            background-color: #fff8e7;
+            border-left: 4px solid #C89B32;
+        }
+
+        main a {
+            color: #315c36;
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        legend {
+            font-weight: bold;
+            padding: 0 8px;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .checklist label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px;
+            background-color: #f3f5f1;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 3px;
+            accent-color: #315c36;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        select,
+        button,
+        textarea {
+            font: inherit;
+        }
+
+        select,
+        button {
+            min-height: 44px;
+            padding: 10px 14px;
+            border-radius: 4px;
+        }
+
+        select {
+            max-width: 100%;
+            border: 1px solid #777;
+            background-color: #fff;
+        }
+
+        button {
+            color: #fff;
+            background-color: #20241E;
+            border: 2px solid #20241E;
+            cursor: pointer;
+        }
+
+        button:hover:not(:disabled) {
+            color: #C89B32;
+            background-color: #343A30;
+        }
+
+        button:disabled {
+            color: #555;
+            background-color: #e5e5e5;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        :focus-visible {
+            outline: 3px solid #C89B32;
+            outline-offset: 3px;
+        }
+
+        #status {
+            padding: 14px;
+            background-color: #edf0ea;
+            border-left: 4px solid #315c36;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .course-card {
+            min-width: 0;
+            padding: 18px;
+            border: 1px solid #ccc;
+            border-top: 5px solid #777;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+
+        .course-card.available {
+            border-top-color: #315c36;
+        }
+
+        .course-card.planned {
+            border-top-color: #C89B32;
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+        }
+
+        .course-card p {
+            margin: 10px 0;
+        }
+
+        .course-card[draggable="true"] {
+            cursor: grab;
+        }
+
+        .course-card details {
+            margin-top: 14px;
+        }
+
+        .course-card summary {
+            font-weight: bold;
+            padding: 8px 0;
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            min-height: 90px;
+            margin: 8px 0;
+            padding: 10px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        #planZone {
+            margin-top: 28px;
+            padding: 20px;
+            border: 3px dashed #C89B32;
+            border-radius: 8px;
+            background-color: #fffaf0;
+        }
+
+        #planZone.drag-over {
+            background-color: #f3e4bb;
+            border-color: #20241E;
+        }
+
+        #planList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #planList li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #C89B32;
+            background-color: #20241E;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 20px 16px;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dropdown-links {
+                position: static;
+                width: 100%;
+                max-width: none;
+                margin-top: 6px;
+                box-shadow: none;
+            }
+
+            main {
+                padding: 0 16px;
+                margin: 24px auto;
+            }
+
+            .hero,
+            .content-area {
+                padding: 24px 0;
+            }
+
+            .course-grid,
+            .checklist {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Cory Foraker logo"
+                 width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html">Assignment 3</a></li>
+                    <li><a href="assignment4.html">Assignment 4</a></li>
+                    <li><a href="assignment5.html">Assignment 5</a></li>
+                    <li><a href="assignment6.html">Assignment 6</a></li>
+                    <li><a href="assignment7.html">Assignment 7</a></li>
+                    <li><a href="assignment9.html">Assignment 9</a></li>
+                    <li>
+                        <a href="assignment11.html" aria-current="page">
+                            Assignment 11
+                        </a>
+                    </li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Assignment 11 - Dynamic Objects</h1>
+            <p>BSIT Course Advisor</p>
+            <p>
+                Record completed courses, check prerequisites,
+                and build a plan for one upcoming semester.
+            </p>
+        </section>
+
+        <section class="content-area">
+            <h2 id="programName"></h2>
+
+            <p class="notice">
+                This classroom planner covers selected programming and
+                database courses from DSC's 2026–2027 BSIT program.
+                It is not a complete degree audit. Admission, transfer
+                evaluations, and other degree requirements are outside its
+                scope. Offering terms are catalog-listed patterns, not live
+                section availability.
+                <a href="https://daytonastate.smartcatalogiq.com/en/2026-2027/college-catalog/program-guides/bs-degree/information-technology-bsit-b-s-degree">
+                    View the BSIT program guide
+                </a>.
+            </p>
+
+            <fieldset>
+                <legend>1. Courses already completed</legend>
+                <p>
+                    Check courses you have passed with a C or better.
+                    Foundation courses are listed for recording prior
+                    credit only; this tool does not plan their enrollment.
+                </p>
+                <div id="completedList" class="checklist"></div>
+            </fieldset>
+
+            <h2>2. Review enrollment options</h2>
+
+            <div class="toolbar">
+                <label for="term">Upcoming semester:</label>
+                <select id="term">
+                    <option value="Fall">Fall</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                </select>
+            </div>
+
+            <p>
+                Drag an available course into the plan, or use its
+                Add to Plan button. Planned courses do not count as
+                completed prerequisites for this same semester.
+            </p>
+
+            <p id="status" role="status">
+                Select completed courses to review your options.
+            </p>
+
+            <div id="courseList" class="course-grid"></div>
+
+            <section id="planZone" aria-labelledby="planHeading">
+                <h2 id="planHeading">3. Your semester plan</h2>
+                <p>Drop available courses inside this gold border.</p>
+                <p id="planSummary"></p>
+                <ul id="planList"></ul>
+            </section>
+
+            <div class="toolbar">
+                <button id="downloadButton" type="button">
+                    Download Plan JSON
+                </button>
+            </div>
+
+            <p>
+                Notes and selections remain in this page while it is open.
+                Download your plan before refreshing or leaving.
+            </p>
+
+            <noscript>
+                <p>Please enable JavaScript to use the course advisor.</p>
+            </noscript>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Website created by Cory Foraker for the Web Systems course
+            at Daytona State College.
+        </p>
+    </footer>
+
+    <!-- Actual JSON data, parsed by JavaScript below. -->
+    <script id="advisorData" type="application/json">
+    {
+        "program": "DSC BSIT: Programming and Database Course Planner",
+        "catalogYear": "2026-2027",
+        "foundationCourses": [
+            {"id": "COP2800", "name": "Java programming alternative"},
+            {"id": "COP2220", "name": "C programming alternative"},
+            {"id": "COP2360", "name": "C# programming alternative"},
+            {"id": "COT3100", "name": "Discrete Computational Analysis"},
+            {"id": "MAD2104", "name": "Discrete Mathematics"}
+        ],
+        "choiceGroups": [
+            {
+                "id": "programElective",
+                "members": ["COP4834", "COP4709"],
+                "note": "Select one of these two elective options for this planner. Both can satisfy the BSIT program elective slot, so you do not need both for that slot. The catalog also lists other electives not included here. This planning restriction does not prohibit taking extra courses."
+            }
+        ],
+        "courses": [
+            {
+                "id": "COP3530",
+                "name": "Data Structures",
+                "credits": 3,
+                "offered": ["Fall", "Spring"],
+                "prerequisites": {
+                    "all": [
+                        {"any": ["COP2800", "COP2220", "COP2360"]},
+                        {"any": ["COT3100", "MAD2104"]}
+                    ]
+                },
+                "catalogPath": "cop-computer-science/3000/cop3530",
+                "information": "Complete one programming alternative AND one discrete-math alternative. This course unlocks Web Systems I and helps unlock Systems Integration.",
+                "studentNote": ""
+            },
+            {
+                "id": "COP4708",
+                "name": "Applied Database I",
+                "credits": 3,
+                "offered": ["Fall", "Spring"],
+                "prerequisites": {
+                    "any": ["COP2800", "COP2220", "COP2360"]
+                },
+                "catalogPath": "cop-computer-science/4000/cop4708",
+                "information": "Any one of the listed programming courses satisfies this prerequisite. This course leads to Applied Database II and helps unlock Systems Integration.",
+                "studentNote": ""
+            },
+            {
+                "id": "COP4813",
+                "name": "Web Systems I",
+                "credits": 3,
+                "offered": ["Fall"],
+                "prerequisites": "COP3530",
+                "catalogPath": "cop-computer-science/4000/cop4813",
+                "information": "Complete Data Structures before enrolling. This is the prerequisite for Web Systems II.",
+                "studentNote": ""
+            },
+            {
+                "id": "CEN4801",
+                "name": "Systems Integration",
+                "credits": 3,
+                "offered": ["Fall"],
+                "prerequisites": {
+                    "all": ["COP4708", "COP3530"]
+                },
+                "catalogPath": "cen-computer-science/4000/cen4801",
+                "information": "Both Applied Database I AND Data Structures must be completed before enrolling.",
+                "studentNote": ""
+            },
+            {
+                "id": "COP4834",
+                "name": "Web Systems II",
+                "credits": 3,
+                "offered": ["Spring"],
+                "prerequisites": "COP4813",
+                "catalogPath": "cop-computer-science/4000/cop4834",
+                "information": "A program elective option for students interested in further web development.",
+                "studentNote": ""
+            },
+            {
+                "id": "COP4709",
+                "name": "Applied Database II",
+                "credits": 3,
+                "offered": ["Spring"],
+                "prerequisites": "COP4708",
+                "catalogPath": "cop-computer-science/4000/cop4709",
+                "information": "A program elective option for students interested in further database study.",
+                "studentNote": ""
+            }
+        ]
+    }
+    </script>
+
+    <script>
+        const data = JSON.parse(
+            document.getElementById("advisorData").textContent
+        );
+
+        const completed = new Set();
+        const plan = new Set();
+
+        const completedList = document.getElementById("completedList");
+        const courseList = document.getElementById("courseList");
+        const planList = document.getElementById("planList");
+        const planZone = document.getElementById("planZone");
+        const termSelect = document.getElementById("term");
+        const statusText = document.getElementById("status");
+
+        const catalogBase =
+            "https://daytonastate.smartcatalogiq.com/en/2026-2027/" +
+            "college-catalog/course-descriptions/";
+
+        const dragType = "application/x-course-id";
+
+        document.getElementById("programName").textContent = data.program;
+
+        // Create elements safely without inserting user notes as HTML.
+        function makeElement(tag, text, className) {
+            const element = document.createElement(tag);
+
+            if (text !== undefined) {
+                element.textContent = text;
+            }
+
+            if (className) {
+                element.className = className;
+            }
+
+            return element;
+        }
+
+        function announce(message) {
+            statusText.textContent = message;
+        }
+
+        // Recursively evaluate nested AND and OR prerequisites.
+        function meets(rule) {
+            if (typeof rule === "string") {
+                return completed.has(rule);
+            }
+
+            if (rule.all) {
+                return rule.all.every(item => meets(item));
+            }
+
+            if (rule.any) {
+                return rule.any.some(item => meets(item));
+            }
+
+            throw new Error("Invalid prerequisite rule.");
+        }
+
+        function describeRule(rule) {
+            if (typeof rule === "string") {
+                return rule;
+            }
+
+            if (rule.all) {
+                return "(" + rule.all.map(describeRule).join(" AND ") + ")";
+            }
+
+            return "(" + rule.any.map(describeRule).join(" OR ") + ")";
+        }
+
+        function getChoiceGroup(courseId) {
+            return data.choiceGroups.find(group =>
+                group.members.includes(courseId)
+            );
+        }
+
+        function getAlternative(courseId) {
+            const group = getChoiceGroup(courseId);
+
+            if (!group) {
+                return null;
+            }
+
+            return group.members.find(id =>
+                id !== courseId && (completed.has(id) || plan.has(id))
+            );
+        }
+
+        // Every enrollment action uses the same validation.
+        function blockedReason(course) {
+            if (completed.has(course.id)) {
+                return "Already completed.";
+            }
+
+            const alternative = getAlternative(course.id);
+
+            if (alternative) {
+                return "Elective slot already covered by " + alternative + ".";
+            }
+
+            if (!meets(course.prerequisites)) {
+                return "Prerequisites not met: "
+                    + describeRule(course.prerequisites) + ".";
+            }
+
+            if (!course.offered.includes(termSelect.value)) {
+                return "Not listed for " + termSelect.value
+                    + ". Catalog terms: " + course.offered.join(", ") + ".";
+            }
+
+            return "";
+        }
+
+        // Generate the completed-course controls from JSON.
+        function buildChecklist() {
+            const courses = [
+                ...data.foundationCourses,
+                ...data.courses
+            ];
+
+            for (const course of courses) {
+                const label = makeElement("label");
+                const checkbox = document.createElement("input");
+
+                checkbox.type = "checkbox";
+                checkbox.value = course.id;
+
+                const text = makeElement(
+                    "span",
+                    course.id + " — " + course.name
+                );
+
+                checkbox.addEventListener("change", function() {
+                    if (checkbox.checked) {
+                        completed.add(course.id);
+                    } else {
+                        completed.delete(course.id);
+                    }
+
+                    const removed = reconcilePlan();
+                    render();
+
+                    announce(
+                        course.id
+                        + (checkbox.checked
+                            ? " marked completed."
+                            : " marked not completed.")
+                        + removalMessage(removed)
+                    );
+                });
+
+                label.append(checkbox, text);
+                completedList.appendChild(label);
+            }
+        }
+
+        // A changed prerequisite, completion, or semester can invalidate a plan.
+        function reconcilePlan() {
+            const removed = [];
+
+            for (const id of [...plan]) {
+                const course = data.courses.find(item => item.id === id);
+
+                if (!course || blockedReason(course)) {
+                    plan.delete(id);
+                    removed.push(id);
+                }
+            }
+
+            return removed;
+        }
+
+        function removalMessage(removed) {
+            return removed.length
+                ? " Removed from the plan because eligibility changed: "
+                    + removed.join(", ") + "."
+                : "";
+        }
+
+        function addCourse(id) {
+            const course = data.courses.find(item => item.id === id);
+
+            if (!course) {
+                announce("Please choose a course from this advisor.");
+                return;
+            }
+
+            if (plan.has(id)) {
+                announce(id + " is already in your plan.");
+                return;
+            }
+
+            const reason = blockedReason(course);
+
+            if (reason) {
+                announce("Cannot add " + id + ". " + reason);
+                return;
+            }
+
+            plan.add(id);
+            render();
+            announce(id + " added to your " + termSelect.value + " plan.");
+        }
+
+        function removeCourse(id) {
+            plan.delete(id);
+            render();
+            announce(id + " removed from your plan.");
+        }
+
+        function createCourseCard(course) {
+            const reason = blockedReason(course);
+            const isPlanned = plan.has(course.id);
+            const canAdd = !reason && !isPlanned;
+
+            const card = makeElement("article", undefined, "course-card");
+
+            if (isPlanned) {
+                card.classList.add("planned");
+            } else if (canAdd) {
+                card.classList.add("available");
+            }
+
+            card.draggable = canAdd;
+
+            const heading = makeElement(
+                "h3",
+                course.id + " — " + course.name
+            );
+
+            const credits = makeElement(
+                "p",
+                course.credits + " credits | Offered: "
+                    + course.offered.join(", ")
+            );
+
+            const prerequisite = makeElement(
+                "p",
+                "Prerequisites: " + describeRule(course.prerequisites)
+            );
+
+            let status = reason || "Available for the selected semester.";
+
+            if (isPlanned) {
+                status = "In your semester plan.";
+            }
+
+            const statusLine = makeElement("p");
+            statusLine.appendChild(makeElement("strong", status));
+
+            const addButton = makeElement(
+                "button",
+                isPlanned ? "Already Planned" : "Add to Plan"
+            );
+
+            addButton.type = "button";
+            addButton.disabled = !canAdd;
+            addButton.setAttribute("aria-label", "Add " + course.id + " to plan");
+
+            addButton.addEventListener("click", function() {
+                addCourse(course.id);
+            });
+
+            card.addEventListener("dragstart", function(event) {
+                // Avoid starting a card drag from its editable controls.
+                if (event.target.closest("textarea, button, a, summary")) {
+                    event.preventDefault();
+                    return;
+                }
+
+                if (blockedReason(course) || plan.has(course.id)) {
+                    event.preventDefault();
+                    return;
+                }
+
+                event.dataTransfer.setData(dragType, course.id);
+                event.dataTransfer.effectAllowed = "copy";
+            });
+
+            card.addEventListener("dragend", function() {
+                planZone.classList.remove("drag-over");
+            });
+
+            const details = makeElement("details");
+            const summary = makeElement("summary", "Course information and notes");
+
+            details.append(
+                summary,
+                makeElement("p", course.information)
+            );
+
+            const group = getChoiceGroup(course.id);
+
+            if (group) {
+                details.appendChild(makeElement("p", group.note));
+            }
+
+            const source = makeElement("a", "View catalog course entry");
+            source.href = catalogBase + course.catalogPath;
+            details.appendChild(source);
+
+            const noteLabel = makeElement("label", "Your note for " + course.id);
+            noteLabel.htmlFor = "note-" + course.id;
+
+            const note = document.createElement("textarea");
+            note.id = "note-" + course.id;
+            note.value = course.studentNote;
+            note.placeholder = "Example: Ask my advisor about transfer credit.";
+            note.maxLength = 1000;
+
+            // Attach the user's information to this course's data object.
+            note.addEventListener("input", function() {
+                course.studentNote = note.value;
+            });
+
+            const noteParagraph = makeElement("p");
+            noteParagraph.appendChild(noteLabel);
+
+            details.append(noteParagraph, note);
+            card.append(
+                heading, credits, prerequisite,
+                statusLine, addButton, details
+            );
+
+            return card;
+        }
+
+        function render() {
+            // Preserve expanded note sections and keyboard focus where possible.
+            const openNotes = new Set(
+                [...courseList.querySelectorAll("article")]
+                    .filter(card => card.querySelector("details").open)
+                    .map(card => card.dataset.courseId)
+            );
+
+            courseList.replaceChildren();
+
+            for (const course of data.courses) {
+                const card = createCourseCard(course);
+                card.dataset.courseId = course.id;
+                card.querySelector("details").open = openNotes.has(course.id);
+                courseList.appendChild(card);
+            }
+
+            planList.replaceChildren();
+            let credits = 0;
+
+            for (const id of plan) {
+                const course = data.courses.find(item => item.id === id);
+                credits += course.credits;
+
+                const item = makeElement("li");
+                const label = makeElement(
+                    "span",
+                    course.id + " — " + course.name
+                        + " (" + course.credits + " credits)"
+                );
+
+                const remove = makeElement("button", "Remove");
+                remove.type = "button";
+                remove.setAttribute("aria-label", "Remove " + id + " from plan");
+
+                remove.addEventListener("click", function() {
+                    removeCourse(id);
+                    document.getElementById("planHeading").focus();
+                });
+
+                item.append(label, remove);
+                planList.appendChild(item);
+            }
+
+            if (plan.size === 0) {
+                planList.appendChild(
+                    makeElement("li", "No courses planned yet.")
+                );
+            }
+
+            document.getElementById("planSummary").textContent =
+                termSelect.value + ": " + plan.size
+                + " course(s), " + credits + " credits.";
+        }
+
+        document.getElementById("planHeading").tabIndex = -1;
+
+        termSelect.addEventListener("change", function() {
+            const removed = reconcilePlan();
+            render();
+
+            announce(
+                "Now planning for " + termSelect.value + "."
+                + removalMessage(removed)
+            );
+        });
+
+        planZone.addEventListener("dragover", function(event) {
+            if ([...event.dataTransfer.types].includes(dragType)) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "copy";
+                planZone.classList.add("drag-over");
+            }
+        });
+
+        planZone.addEventListener("dragleave", function(event) {
+            if (!planZone.contains(event.relatedTarget)) {
+                planZone.classList.remove("drag-over");
+            }
+        });
+
+        planZone.addEventListener("drop", function(event) {
+            event.preventDefault();
+            planZone.classList.remove("drag-over");
+
+            const id = event.dataTransfer.getData(dragType);
+
+            if (id) {
+                addCourse(id);
+            }
+        });
+
+        document.getElementById("downloadButton")
+            .addEventListener("click", function() {
+                const exportData = {
+                    program: data.program,
+                    catalogYear: data.catalogYear,
+                    semester: termSelect.value,
+                    completed: [...completed],
+                    planned: [...plan],
+                    courses: data.courses
+                };
+
+                const file = new Blob(
+                    [JSON.stringify(exportData, null, 2)],
+                    { type: "application/json" }
+                );
+
+                const url = URL.createObjectURL(file);
+                const link = document.createElement("a");
+
+                link.href = url;
+                link.download = "bsit-course-plan.json";
+
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                announce("Your course plan and notes were downloaded.");
+            });
+
+        buildChecklist();
+        render();
+    </script>
+
+</body>
+</html>

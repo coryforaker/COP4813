@@ -358,39 +358,37 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        <section class="hero">
-            <h1>Web Content Management Systems</h1>
-            <p>
-                A content management system (CMS) lets people publish and update
-                a website through an editor. This comparison looks at how five
-                systems work, where each one fits, and what could limit its use.
-            </p>
-        </section>
+    <section class="content-area">
+        <h1 id="cms-title">Content Management Systems</h1>
 
-        <div class="content-area">
-            <noscript>Enable JavaScript to load the CMS comparison table.</noscript>
-            <p id="status" role="status" hidden></p>
+        <p>
+            For this assignment, I compared five content management systems.
+            I looked at what each one runs on, what you can do with it,
+            and what might make you choose one over another.
+        </p>
 
-            <div id="table-container" class="table-container"
-                 role="region" aria-label="Scrollable CMS comparison"
-                 tabindex="0" hidden>
-                <table>
-                    <caption>CMS Comparison</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Support</th>
-                            <th scope="col">Technology</th>
-                            <th scope="col">Capabilities</th>
-                            <th scope="col">Limitations</th>
-                            <th scope="col">Examples</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cms-rows"></tbody>
-                </table>
-            </div>
+        <noscript>Enable JavaScript to view the comparison.</noscript>
+        <p id="status" role="status" hidden></p>
+
+        <div id="table-container" class="table-container"
+             role="region" aria-label="Scrollable comparison table"
+             tabindex="0" hidden>
+            <table aria-labelledby="cms-title">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Support</th>
+                        <th scope="col">Technology</th>
+                        <th scope="col">Capabilities</th>
+                        <th scope="col">Limitations</th>
+                        <th scope="col">Examples</th>
+                    </tr>
+                </thead>
+                <tbody id="cms-rows"></tbody>
+            </table>
         </div>
-    </main>
+    </section>
+</main>
 
     <footer>
         <p>

@@ -2,23 +2,34 @@
   {
     "Name": "WordPress",
     "Support": {
-      "points": ["Open-source software maintained by the WordPress community. Many hosting companies offer managed installations."],
-      "sourceLabel": "WordPress hosting",
+      "points": [
+        "WordPress is open source and has community support. Many hosting companies also offer plans that manage WordPress for you."
+      ],
+      "sourceLabel": "Hosting options",
       "source": "https://wordpress.org/hosting/"
     },
     "Technology": {
-      "points": ["PHP runs on the server. MySQL or MariaDB stores posts, settings, and user accounts.", "Editors use a browser-based block editor. Visitors receive HTML, CSS, and JavaScript from the active theme."],
-      "sourceLabel": "Hosting requirements",
+      "points": [
+        "WordPress runs on PHP and stores content in MySQL or MariaDB.",
+        "You edit pages in your browser using the block editor."
+      ],
+      "sourceLabel": "Server requirements",
       "source": "https://wordpress.org/about/requirements/"
     },
     "Capabilities": {
-      "points": ["Editors can build pages from reusable blocks.", "Themes control the layout. Plugins add features such as forms or online stores. A REST API lets other applications read or update content."],
+      "points": [
+        "You can change the layout with a theme and add features like contact forms with plugins.",
+        "The REST API lets another app pull posts from your site."
+      ],
       "sourceLabel": "WordPress features",
       "source": "https://wordpress.org/about/features/"
     },
     "Limitations": {
-      "points": ["A self-hosted site needs ongoing updates for the core software, themes, and plugins.", "An abandoned plugin can leave a site dependent on code that no longer receives security fixes."],
-      "sourceLabel": "WordPress hardening guide",
+      "points": [
+        "If you run the site yourself, you have to keep WordPress, your theme, and your plugins up to date.",
+        "If a developer stops maintaining a plugin you rely on, you may need to find a replacement."
+      ],
+      "sourceLabel": "Security guide",
       "source": "https://developer.wordpress.org/advanced-administration/security/hardening/"
     },
     "Examples": {
@@ -31,23 +42,34 @@
   {
     "Name": "Drupal",
     "Support": {
-      "points": ["Open-source project maintained by the Drupal community. The Drupal Association supports the project, and service providers offer commercial support."],
+      "points": [
+        "Drupal is open source. The Drupal Association supports the project, and companies offer paid help with Drupal sites."
+      ],
       "sourceLabel": "About Drupal",
       "source": "https://www.drupal.org/about"
     },
     "Technology": {
-      "points": ["PHP runs on the server. Supported databases include MySQL, MariaDB, PostgreSQL, and SQLite.", "Editors manage content in a browser. Twig templates generate the HTML visitors see."],
-      "sourceLabel": "System requirements",
-      "source": "https://www.drupal.org/docs/getting-started/system-requirements"
+      "points": [
+        "Drupal runs on PHP and can use databases such as MySQL or PostgreSQL.",
+        "Editors work in a browser. Drupal uses Twig templates to turn stored content into web pages."
+      ],
+      "sourceLabel": "Drupal documentation",
+      "source": "https://www.drupal.org/docs"
     },
     "Capabilities": {
-      "points": ["Administrators can define content types with different fields, such as a school event with a date, location, and organizer.", "Roles, editorial workflows, and translations let departments manage and approve their own content."],
+      "points": [
+        "You can set up different fields for different kinds of content. A school event could have a date and location, while a staff profile could have a job title and email.",
+        "One person can draft a page and another can approve it before it goes live."
+      ],
       "sourceLabel": "Drupal user guide",
       "source": "https://www.drupal.org/docs/user_guide/en/index.html"
     },
     "Limitations": {
-      "points": ["Someone must design the content types, permissions, and workflows before editors can use them.", "Major upgrades require checking whether contributed modules and custom themes work with the new release."],
-      "sourceLabel": "Drupal upgrade guide",
+      "points": [
+        "Someone has to set up those fields, roles, and approval steps before staff can use them.",
+        "Before a major upgrade, you need to check whether your modules and theme support the new version."
+      ],
+      "sourceLabel": "Upgrade guide",
       "source": "https://www.drupal.org/docs/upgrading-drupal"
     },
     "Examples": {
@@ -60,51 +82,71 @@
   {
     "Name": "Ghost",
     "Support": {
-      "points": ["Open-source software developed by the nonprofit Ghost Foundation. Ghost(Pro) is its managed hosting service."],
+      "points": [
+        "The Ghost Foundation develops Ghost as open-source software. You can host it yourself or pay for Ghost(Pro)."
+      ],
       "sourceLabel": "About Ghost",
       "source": "https://ghost.org/about/"
     },
     "Technology": {
-      "points": ["Node.js runs the application. MySQL 8 is the supported production database.", "Writers use the browser editor. Handlebars themes render the publication for readers."],
-      "sourceLabel": "Ghost developer documentation",
+      "points": [
+        "Ghost runs on Node.js and uses MySQL 8 for production sites.",
+        "Writers use a browser editor. Handlebars templates control how posts look to readers."
+      ],
+      "sourceLabel": "Ghost developer docs",
       "source": "https://ghost.org/docs/"
     },
     "Capabilities": {
-      "points": ["Publish an article to the website, send it as an email newsletter, or do both.", "Offer free and paid memberships and restrict individual posts to specific membership tiers."],
-      "sourceLabel": "Ghost publishing features",
+      "points": [
+        "You can publish an article on your site and send it to subscribers as a newsletter from the same editor.",
+        "You can make some posts free and reserve others for paying members."
+      ],
+      "sourceLabel": "Publishing features",
       "source": "https://ghost.org/"
     },
     "Limitations": {
-      "points": ["Built-in paid subscriptions depend on Stripe. A publisher that needs another payment processor must arrange a separate integration.", "Self-hosting requires maintaining the Node.js application and its database."],
+      "points": [
+        "Ghost uses Stripe for built-in subscription payments. If your publication uses another payment processor, connecting it takes extra work."
+      ],
       "sourceLabel": "Stripe integration",
       "source": "https://ghost.org/integrations/stripe/"
     },
     "Examples": {
       "site": "404 Media",
       "url": "https://www.404media.co/",
-      "sourceLabel": "Ghost publisher directory",
+      "sourceLabel": "Ghost publisher listing",
       "source": "https://explore.ghost.org/p/404-media"
     }
   },
   {
     "Name": "Wagtail",
     "Support": {
-      "points": ["Open-source CMS created by Torchbox and maintained with community contributors. Commercial development and support are available."],
+      "points": [
+        "Torchbox created Wagtail. It is open source, with community contributors and commercial support available."
+      ],
       "sourceLabel": "Wagtail project",
       "source": "https://github.com/wagtail/wagtail"
     },
     "Technology": {
-      "points": ["Built on Python and Django. PostgreSQL is a supported production database.", "Editors work in a browser admin interface. Django templates can render pages for visitors."],
+      "points": [
+        "Wagtail uses Python and the Django framework. PostgreSQL is one database option.",
+        "Editors work in a browser, and Django templates control how the finished pages look."
+      ],
       "sourceLabel": "Wagtail documentation",
       "source": "https://docs.wagtail.org/en/stable/"
     },
     "Capabilities": {
-      "points": ["Developers define page types and the blocks editors can combine, such as text, images, and quotations.", "Editors can preview changes and submit pages for approval before publishing."],
+      "points": [
+        "A developer can give editors a set of blocks for text, photos, and quotes. Editors can then arrange those blocks as they build a page.",
+        "Editors can preview a draft and send it for approval."
+      ],
       "sourceLabel": "Wagtail features",
       "source": "https://wagtail.org/features/"
     },
     "Limitations": {
-      "points": ["Setting up a site requires coding skills. A new page type generally requires a developer to define its fields and template."],
+      "points": [
+        "Getting the site running takes coding experience. If editors need a new page type, a developer usually has to build it first."
+      ],
       "sourceLabel": "Wagtail FAQ",
       "source": "https://wagtail.org/faqs/"
     },
@@ -118,29 +160,40 @@
   {
     "Name": "Grav",
     "Support": {
-      "points": ["Open-source CMS maintained by the Grav team and community. The team also offers paid products and support."],
+      "points": [
+        "Grav is open source. Its team and community maintain it, and the team also offers paid support."
+      ],
       "sourceLabel": "About Grav",
       "source": "https://getgrav.org/about"
     },
     "Technology": {
-      "points": ["PHP runs on the server. Markdown and YAML files store page content and settings without a database server.", "Twig templates render HTML. A browser-based admin interface is available for editors."],
+      "points": [
+        "Grav runs on PHP. It stores page content in Markdown files and settings in YAML files, so it can run without a database server.",
+        "Twig templates generate the pages. Editors can work in the browser using the admin panel."
+      ],
       "sourceLabel": "Grav documentation",
       "source": "https://learn.getgrav.org/"
     },
     "Capabilities": {
-      "points": ["Themes and plugins extend the site. Editors can publish multilingual pages.", "Because content is stored in files, a team can track page changes in Git alongside its templates."],
+      "points": [
+        "You can install themes and plugins or set up pages in multiple languages.",
+        "Since the pages are files, you can track changes to the content in Git alongside changes to the code."
+      ],
       "sourceLabel": "Grav features",
       "source": "https://getgrav.org/"
     },
     "Limitations": {
-      "points": ["Grav does not provide relational tables for page content. A project that needs SQL joins across records would need a separate data layer.", "A static-only host cannot run Grav's PHP application directly."],
-      "sourceLabel": "Grav architecture",
+      "points": [
+        "You need a host that runs PHP. I couldn't run Grav directly on GitHub Pages the way I host this class website.",
+        "If a project needs SQL queries to link records, Grav's page files don't provide that on their own."
+      ],
+      "sourceLabel": "How Grav stores content",
       "source": "https://getgrav.org/about"
     },
     "Examples": {
-      "site": "Grav project website",
+      "site": "Grav's own website",
       "url": "https://getgrav.org/",
-      "sourceLabel": "Built with Grav credit in site footer",
+      "sourceLabel": "Built with Grav credit in footer",
       "source": "https://getgrav.org/"
     }
   }

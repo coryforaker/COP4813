@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A two-player tic tac toe game using runes and arrows.">
+    <title>Assignment 13 - Tic Tac Toe | Cory Foraker</title>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            z-index: 20;
+            padding: 10px 16px;
+            background-color: white;
+            color: #20241e;
+            transform: translateY(-200%);
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+        }
+
+        /* Site header and navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background-color: #20241e;
+            color: white;
+        }
+
+        .logo img {
+            display: block;
+            width: 100px;
+            height: auto;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+        }
+
+        nav a,
+        nav summary {
+            min-height: 44px;
+            padding: 10px 12px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        nav > a,
+        .dropdown-links a {
+            display: block;
+        }
+
+        nav a:hover,
+        nav a:focus-visible,
+        nav summary:hover,
+        nav summary:focus-visible,
+        .dropdown[open] > summary {
+            color: #c89b32;
+            background-color: #343a30;
+        }
+
+        nav a[aria-current="page"] {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        summary {
+            cursor: pointer;
+        }
+
+        .dropdown-links {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            width: 230px;
+            max-width: calc(100vw - 32px);
+            max-height: 65vh;
+            overflow-y: auto;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+            background-color: #20241e;
+            border: 1px solid #c89b32;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Assignment page */
+        main {
+            width: calc(100% - 32px);
+            max-width: 840px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            padding: 22px 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            margin: 0;
+            color: #283527;
+            font-size: clamp(1.75rem, 5vw, 2.25rem);
+            line-height: 1.25;
+        }
+
+        .hero p {
+            margin: 5px 0;
+        }
+
+        /* Game board and scoreboard */
+        .match {
+            max-width: 480px;
+            margin: auto;
+            padding: 18px 0;
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding-bottom: 12px;
+        }
+
+        .scoreboard strong {
+            margin-left: 4px;
+        }
+
+        .tabletop {
+            padding: 16px;
+            text-align: center;
+            color: #fff5d8;
+            background-color: #24332e;
+            border: 3px double #bda36d;
+            border-radius: 8px;
+        }
+
+        #status {
+            margin: 0 0 14px;
+            font-size: 1.45rem;
+            line-height: 1.35;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            max-width: 320px;
+            margin: auto;
+        }
+
+        .square {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            aspect-ratio: 1;
+            padding: 0;
+            background-color: #34463f;
+            border: 1px solid #798474;
+            border-radius: 5px;
+            font-size: 2.8rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .square:hover:not([aria-disabled="true"]) {
+            background-color: #46594c;
+        }
+
+        .square[aria-disabled="true"] {
+            cursor: default;
+        }
+
+        .square.rune {
+            color: #afebe0;
+        }
+
+        .square.arrow {
+            color: #f5c58b;
+        }
+
+        .square.winner {
+            background-color: #5c572c;
+            border: 3px double #ffe494;
+        }
+
+        button:focus-visible,
+        summary:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #c89b32;
+            outline-offset: 2px;
+        }
+
+        #playAgain {
+            margin-top: 16px;
+            padding: 9px 20px;
+            background-color: #f3d899;
+            color: #282a20;
+            border: 0;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .rules {
+            margin-top: 14px;
+        }
+
+        .rules summary {
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #c89b32;
+            background-color: #20241e;
+        }
+
+        footer p {
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 20px 16px;
+            }
+
+            nav {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                gap: 0.5rem;
+            }
+
+            nav > a,
+            .dropdown summary {
+                width: 100%;
+                padding: 12px 16px;
+                background-color: #2b3028;
+            }
+
+            .dropdown-links {
+                position: static;
+                width: 100%;
+                max-width: none;
+                max-height: none;
+                margin-top: 6px;
+                box-shadow: none;
+            }
+
+            main {
+                margin: 24px auto;
+                padding: 0 16px;
+            }
+
+            footer {
+                margin-top: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Cory Foraker logo" width="100" height="100">
+        </div>
+
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+
+            <details class="dropdown">
+                <summary>Assignments</summary>
+                <ul class="dropdown-links">
+                    <li><a href="assignments.html">All Assignments</a></li>
+                    <li><a href="assignment1.html">Assignment 1</a></li>
+                    <li><a href="assignment2.html">Assignment 2</a></li>
+                    <li><a href="assignment3.html">Assignment 3</a></li>
+                    <li><a href="assignment4.html">Assignment 4</a></li>
+                    <li><a href="assignment5.html">Assignment 5</a></li>
+                    <li><a href="assignment6.html">Assignment 6</a></li>
+                    <li><a href="assignment7.html">Assignment 7</a></li>
+                    <li><a href="assignment9.html">Assignment 9</a></li>
+                    <li><a href="assignment13.html" aria-current="page">Assignment 13</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Favorite Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="sites.html">All Favorite Sites</a></li>
+                    <li><a href="https://www.youtube.com/">YouTube</a></li>
+                    <li><a href="https://www.wikipedia.org/">Wikipedia</a></li>
+                </ul>
+            </details>
+
+            <details class="dropdown">
+                <summary>Programming Sites</summary>
+                <ul class="dropdown-links">
+                    <li><a href="code.html">All Programming Sites</a></li>
+                    <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
+                    <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+                </ul>
+            </details>
+        </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        <section class="hero">
+            <h1>Assignment 13 - Tic Tac Toe</h1>
+            <p>Two players, one board. Line up three runes or three arrows to win.</p>
+        </section>
+
+        <section class="match" aria-label="Tic tac toe game">
+            <div class="scoreboard" role="group" aria-label="Match score">
+                <div>ᚱ Wizard <strong id="wizardWins">0</strong></div>
+                <div>Draws <strong id="draws">0</strong></div>
+                <div>➶ Ranger <strong id="rangerWins">0</strong></div>
+            </div>
+
+            <div class="tabletop">
+                <h2 id="status" aria-live="polite">Wizard’s turn · ᚱ</h2>
+                <div id="board" role="group" aria-label="Tic tac toe board"></div>
+                <button id="playAgain" type="button" hidden>Play again</button>
+            </div>
+
+            <details class="rules">
+                <summary>How to Play</summary>
+                <p>
+                    Share one device. The wizard places runes (ᚱ), and the ranger
+                    places arrows (➶). Take turns choosing an empty square.
+                    Get three of your pieces in a row, column, or diagonal to win.
+                    If the board fills up before either player wins, the round
+                    ends in a draw. Choose Play again to start the next round.
+                    Players alternate who goes first.
+                </p>
+            </details>
+        </section>
+    </main>
+
+    <footer>
+        <p>Website created by Cory Foraker for the Web Systems course at Daytona State College.</p>
+    </footer>
+
+    <script>
+        const players = [
+            { name: "Wizard", symbol: "ᚱ", piece: "rune", scoreId: "wizardWins" },
+            { name: "Ranger", symbol: "➶", piece: "arrow", scoreId: "rangerWins" }
+        ];
+
+        // Squares are numbered 0 through 8, from left to right and top to bottom.
+        const winningLines = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        const boardElement = document.getElementById("board");
+        const statusElement = document.getElementById("status");
+        const playAgain = document.getElementById("playAgain");
+        const squares = [];
+        const scores = [0, 0];
+
+        let board = Array(9).fill(null);
+        let startingPlayer = 0;
+        let currentPlayer = startingPlayer;
+        let drawCount = 0;
+        let roundOver = false;
+
+        function squareLabel(index, contents) {
+            const row = Math.floor(index / 3) + 1;
+            const column = (index % 3) + 1;
+            return `Row ${row}, column ${column}, ${contents}`;
+        }
+
+        function showTurn() {
+            const player = players[currentPlayer];
+            statusElement.textContent = `${player.name}’s turn · ${player.symbol}`;
+        }
+
+        function finishRound(message) {
+            roundOver = true;
+            statusElement.textContent = message;
+
+            for (const square of squares) {
+                square.setAttribute("aria-disabled", "true");
+            }
+
+            playAgain.hidden = false;
+            playAgain.focus();
+        }
+
+        function takeTurn(index) {
+            if (roundOver || board[index] !== null) {
+                return;
+            }
+
+            const player = players[currentPlayer];
+            const square = squares[index];
+
+            board[index] = currentPlayer;
+            square.textContent = player.symbol;
+            square.classList.add(player.piece);
+            square.setAttribute("aria-label", squareLabel(index, player.piece));
+            square.setAttribute("aria-disabled", "true");
+
+            const winningLine = winningLines.find(line =>
+                line.every(position => board[position] === currentPlayer)
+            );
+
+            if (winningLine) {
+                for (const position of winningLine) {
+                    squares[position].classList.add("winner");
+                }
+
+                scores[currentPlayer]++;
+                document.getElementById(player.scoreId).textContent = scores[currentPlayer];
+                finishRound(`${player.name} wins!`);
+                return;
+            }
+
+            if (board.every(value => value !== null)) {
+                drawCount++;
+                document.getElementById("draws").textContent = drawCount;
+                finishRound("It’s a draw!");
+                return;
+            }
+
+            currentPlayer = 1 - currentPlayer;
+            showTurn();
+        }
+
+        // Create the nine board buttons once and reuse them each round.
+        for (let index = 0; index < board.length; index++) {
+            const square = document.createElement("button");
+            square.type = "button";
+            square.className = "square";
+            square.setAttribute("aria-label", squareLabel(index, "empty"));
+            square.addEventListener("click", () => takeTurn(index));
+            boardElement.appendChild(square);
+            squares.push(square);
+        }
+
+        playAgain.addEventListener("click", () => {
+            board.fill(null);
+            startingPlayer = 1 - startingPlayer;
+            currentPlayer = startingPlayer;
+            roundOver = false;
+
+            squares.forEach((square, index) => {
+                square.textContent = "";
+                square.className = "square";
+                square.setAttribute("aria-label", squareLabel(index, "empty"));
+                square.removeAttribute("aria-disabled");
+            });
+
+            playAgain.hidden = true;
+            showTurn();
+            squares[0].focus();
+        });
+    </script>
+</body>
+</html>

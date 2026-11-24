@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A two-player tic tac toe game using runes and arrows.">
-    <title>Assignment 13 - Tic Tac Toe | Cory Foraker</title>
+    <meta name="description"
+          content="Practice subtraction by making change for five customers in a fantasy potion shop.">
+
+    <title>Assignment 13 - Potion Shop | Cory Foraker</title>
 
     <style>
         *,
@@ -44,8 +46,8 @@
         /* Site header and navigation */
         header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
             padding: 1rem 2rem;
@@ -56,6 +58,7 @@
         .logo img {
             display: block;
             width: 100px;
+            max-width: 100%;
             height: auto;
         }
 
@@ -71,10 +74,10 @@
         nav summary {
             min-height: 44px;
             padding: 10px 12px;
+            border-radius: 4px;
             color: white;
             font-weight: bold;
             text-decoration: none;
-            border-radius: 4px;
         }
 
         nav > a,
@@ -87,8 +90,8 @@
         nav summary:hover,
         nav summary:focus-visible,
         .dropdown[open] > summary {
-            color: #c89b32;
             background-color: #343a30;
+            color: #c89b32;
         }
 
         nav a[aria-current="page"] {
@@ -96,11 +99,18 @@
             text-underline-offset: 4px;
         }
 
+        a:focus-visible,
+        summary:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #c89b32;
+            outline-offset: 2px;
+        }
+
         .dropdown {
             position: relative;
         }
 
-        summary {
+        .dropdown summary {
             cursor: pointer;
         }
 
@@ -134,136 +144,132 @@
         }
 
         .hero {
-            padding: 22px 12px 16px;
+            padding: 32px 16px 20px;
             text-align: center;
             border-bottom: 1px solid #eee;
         }
 
         h1 {
             margin: 0;
-            color: #283527;
             font-size: clamp(1.75rem, 5vw, 2.25rem);
             line-height: 1.25;
         }
 
         .hero p {
-            margin: 5px 0;
+            margin: 8px 0 0;
         }
 
-        /* Game board and scoreboard */
-        .match {
-            max-width: 480px;
-            margin: auto;
-            padding: 18px 0;
+        /* Potion shop */
+        .counter {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 22px 0 32px;
         }
 
         .scoreboard {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            padding-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        .scoreboard strong {
-            margin-left: 4px;
-        }
-
-        .tabletop {
-            padding: 16px;
-            text-align: center;
-            color: #fff5d8;
-            background-color: #24332e;
-            border: 3px double #bda36d;
+        .order {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px;
             border-radius: 8px;
+            background-color: #24332e;
+            color: #fff5d8;
         }
 
-        #status {
-            margin: 0 0 14px;
-            font-size: 1.45rem;
-            line-height: 1.35;
+        .order h2,
+        .order p {
+            margin: 0;
         }
 
-        #board {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 6px;
-            max-width: 320px;
-            margin: auto;
+        .order p {
+            margin-top: 5px;
         }
 
-        .square {
-            display: grid;
-            place-items: center;
-            width: 100%;
-            aspect-ratio: 1;
-            padding: 0;
-            background-color: #34463f;
-            border: 1px solid #798474;
-            border-radius: 5px;
-            font-size: 2.8rem;
-            line-height: 1;
+        /* The bottle color changes with each potion. */
+        .bottle {
+            position: relative;
+            flex: 0 0 40px;
+            height: 44px;
+            margin-top: 12px;
+            border: 3px solid #d6e6d8;
+            border-radius: 13px 13px 18px 18px;
+            background: linear-gradient(
+                to top,
+                var(--liquid, #c87881) 62%,
+                transparent 62%
+            );
+        }
+
+        .bottle::before {
+            content: "";
+            position: absolute;
+            top: -14px;
+            left: 9px;
+            width: 16px;
+            height: 14px;
+            background-color: #24332e;
+            border: 2px solid #d6e6d8;
+            border-top: 5px solid #c99c66;
+        }
+
+        #answers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .counter button {
+            min-height: 44px;
+            padding: 8px 16px;
+            border: 1px solid #536853;
+            border-radius: 4px;
+            background-color: white;
+            color: #24332e;
+            font-weight: 600;
             cursor: pointer;
         }
 
-        .square:hover:not([aria-disabled="true"]) {
-            background-color: #46594c;
+        .counter button:hover:enabled {
+            background-color: #edf2eb;
         }
 
-        .square[aria-disabled="true"] {
+        .counter button:disabled {
+            color: #666;
             cursor: default;
         }
 
-        .square.rune {
-            color: #afebe0;
+        #next {
+            background-color: #24332e;
+            color: white;
         }
 
-        .square.arrow {
-            color: #f5c58b;
+        #next:hover {
+            background-color: #374b40;
         }
 
-        .square.winner {
-            background-color: #5c572c;
-            border: 3px double #ffe494;
-        }
-
-        button:focus-visible,
-        summary:focus-visible,
-        a:focus-visible {
-            outline: 3px solid #c89b32;
-            outline-offset: 2px;
-        }
-
-        #playAgain {
-            margin-top: 16px;
-            padding: 9px 20px;
-            background-color: #f3d899;
-            color: #282a20;
-            border: 0;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .rules {
-            margin-top: 14px;
-        }
-
-        .rules summary {
-            font-weight: 600;
+        #feedback:empty {
+            margin: 0;
         }
 
         footer {
             margin-top: 40px;
             padding: 20px;
+            background-color: #20241e;
+            color: #c89b32;
             text-align: center;
             font-size: 0.9rem;
-            color: #c89b32;
-            background-color: #20241e;
         }
 
         footer p {
-            margin: 0 auto;
+            margin: 0;
         }
 
         @media (max-width: 768px) {
@@ -300,6 +306,10 @@
                 padding: 0 16px;
             }
 
+            .hero {
+                padding: 24px 0 16px;
+            }
+
             footer {
                 margin-top: 24px;
             }
@@ -308,7 +318,7 @@
 </head>
 
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header>
         <div class="logo">
@@ -330,7 +340,9 @@
                     <li><a href="assignment6.html">Assignment 6</a></li>
                     <li><a href="assignment7.html">Assignment 7</a></li>
                     <li><a href="assignment9.html">Assignment 9</a></li>
-                    <li><a href="assignment13.html" aria-current="page">Assignment 13</a></li>
+                    <li>
+                        <a href="assignment13.html" aria-current="page">Assignment 13</a>
+                    </li>
                 </ul>
             </details>
 
@@ -356,34 +368,33 @@
 
     <main id="main-content" tabindex="-1">
         <section class="hero">
-            <h1>Assignment 13 - Tic Tac Toe</h1>
-            <p>Two players, one board. Line up three runes or three arrows to win.</p>
+            <h1>Assignment 13 - Potion Shop</h1>
+            <p>
+                Serve five customers. Subtract the potion price from the gold
+                each customer pays, then choose how much change to give back.
+                Each correct answer earns one point.
+            </p>
         </section>
 
-        <section class="match" aria-label="Tic tac toe game">
-            <div class="scoreboard" role="group" aria-label="Match score">
-                <div>ᚱ Wizard <strong id="wizardWins">0</strong></div>
-                <div>Draws <strong id="draws">0</strong></div>
-                <div>➶ Ranger <strong id="rangerWins">0</strong></div>
+        <section class="counter" aria-label="Potion counter">
+            <div class="scoreboard">
+                <span id="customer"></span>
+                <strong id="score"></strong>
             </div>
 
-            <div class="tabletop">
-                <h2 id="status" aria-live="polite">Wizard’s turn · ᚱ</h2>
-                <div id="board" role="group" aria-label="Tic tac toe board"></div>
-                <button id="playAgain" type="button" hidden>Play again</button>
+            <div class="order">
+                <div class="bottle" aria-hidden="true"></div>
+                <div>
+                    <h2 id="potion"></h2>
+                    <p id="sale"></p>
+                </div>
             </div>
 
-            <details class="rules">
-                <summary>How to Play</summary>
-                <p>
-                    Share one device. The wizard places runes (ᚱ), and the ranger
-                    places arrows (➶). Take turns choosing an empty square.
-                    Get three of your pieces in a row, column, or diagonal to win.
-                    If the board fills up before either player wins, the round
-                    ends in a draw. Choose Play again to start the next round.
-                    Players alternate who goes first.
-                </p>
-            </details>
+            <h3 id="question">How much change do you give back?</h3>
+            <div id="answers" role="group" aria-labelledby="question"></div>
+
+            <p id="feedback" aria-live="polite"></p>
+            <button id="next" type="button" hidden>Next customer</button>
         </section>
     </main>
 
@@ -392,121 +403,115 @@
     </footer>
 
     <script>
-        const players = [
-            { name: "Wizard", symbol: "ᚱ", piece: "rune", scoreId: "wizardWins" },
-            { name: "Ranger", symbol: "➶", piece: "arrow", scoreId: "rangerWins" }
+        const potions = [
+            { name: "Healing Potion", buyer: "traveler", color: "#c87881" },
+            { name: "Night Sight", buyer: "scout", color: "#ab92da" },
+            { name: "Water Breathing", buyer: "diver", color: "#73b8d5" },
+            { name: "Fleetfoot Tonic", buyer: "courier", color: "#8cbd83" },
+            { name: "Ember Ward", buyer: "smith", color: "#e5a564" }
         ];
 
-        // Squares are numbered 0 through 8, from left to right and top to bottom.
-        const winningLines = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
+        const customerLabel = document.getElementById("customer");
+        const scoreLabel = document.getElementById("score");
+        const potionName = document.getElementById("potion");
+        const sale = document.getElementById("sale");
+        const answers = document.getElementById("answers");
+        const feedback = document.getElementById("feedback");
+        const nextButton = document.getElementById("next");
+        const bottle = document.querySelector(".bottle");
 
-        const boardElement = document.getElementById("board");
-        const statusElement = document.getElementById("status");
-        const playAgain = document.getElementById("playAgain");
-        const squares = [];
-        const scores = [0, 0];
+        let customerIndex = 0;
+        let score = 0;
 
-        let board = Array(9).fill(null);
-        let startingPlayer = 0;
-        let currentPlayer = startingPlayer;
-        let drawCount = 0;
-        let roundOver = false;
-
-        function squareLabel(index, contents) {
-            const row = Math.floor(index / 3) + 1;
-            const column = (index % 3) + 1;
-            return `Row ${row}, column ${column}, ${contents}`;
+        function updateScore() {
+            scoreLabel.textContent = `Score: ${score} / ${potions.length}`;
         }
 
-        function showTurn() {
-            const player = players[currentPlayer];
-            statusElement.textContent = `${player.name}’s turn · ${player.symbol}`;
+        function serveCustomer() {
+            const potion = potions[customerIndex];
+
+            // Each potion costs 3–16 gold. The customer pays 1–12 gold extra.
+            const price = 3 + Math.floor(Math.random() * 14);
+            const paid = price + 1 + Math.floor(Math.random() * 12);
+            const correctChange = paid - price;
+            let answered = false;
+
+            customerLabel.textContent =
+                `Customer ${customerIndex + 1} of ${potions.length}`;
+
+            potionName.textContent = potion.name;
+            sale.textContent =
+                `A ${potion.buyer} pays ${paid} gold for a potion costing ${price} gold.`;
+
+            bottle.style.setProperty("--liquid", potion.color);
+            answers.replaceChildren();
+            feedback.textContent = "";
+            nextButton.hidden = true;
+            updateScore();
+
+            // Place the right answer in a random spot among two wrong answers.
+            const choices = [correctChange - 1, correctChange + 2];
+            const randomPosition = Math.floor(Math.random() * 3);
+            choices.splice(randomPosition, 0, correctChange);
+
+            for (const amount of choices) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.textContent = `${amount} gold`;
+
+                button.addEventListener("click", () => {
+                    if (answered) return;
+                    answered = true;
+
+                    const isCorrect = amount === correctChange;
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    updateScore();
+
+                    const result = isCorrect
+                        ? "Correct!"
+                        : `The correct change is ${correctChange} gold.`;
+
+                    feedback.textContent =
+                        `${result} ${paid} − ${price} = ${correctChange}.`;
+
+                    // Each customer gets one answer.
+                    for (const choice of answers.children) {
+                        choice.disabled = true;
+                    }
+
+                    const lastCustomer = customerIndex === potions.length - 1;
+
+                    if (lastCustomer) {
+                        customerLabel.textContent = "Shift complete";
+                        feedback.textContent +=
+                            ` You gave the correct change to ${score} of ${potions.length} customers.`;
+                    }
+
+                    nextButton.textContent = lastCustomer ? "Play again" : "Next customer";
+                    nextButton.hidden = false;
+                    nextButton.focus();
+                });
+
+                answers.appendChild(button);
+            }
         }
 
-        function finishRound(message) {
-            roundOver = true;
-            statusElement.textContent = message;
-
-            for (const square of squares) {
-                square.setAttribute("aria-disabled", "true");
+        nextButton.addEventListener("click", () => {
+            if (customerIndex === potions.length - 1) {
+                customerIndex = 0;
+                score = 0;
+            } else {
+                customerIndex++;
             }
 
-            playAgain.hidden = false;
-            playAgain.focus();
-        }
-
-        function takeTurn(index) {
-            if (roundOver || board[index] !== null) {
-                return;
-            }
-
-            const player = players[currentPlayer];
-            const square = squares[index];
-
-            board[index] = currentPlayer;
-            square.textContent = player.symbol;
-            square.classList.add(player.piece);
-            square.setAttribute("aria-label", squareLabel(index, player.piece));
-            square.setAttribute("aria-disabled", "true");
-
-            const winningLine = winningLines.find(line =>
-                line.every(position => board[position] === currentPlayer)
-            );
-
-            if (winningLine) {
-                for (const position of winningLine) {
-                    squares[position].classList.add("winner");
-                }
-
-                scores[currentPlayer]++;
-                document.getElementById(player.scoreId).textContent = scores[currentPlayer];
-                finishRound(`${player.name} wins!`);
-                return;
-            }
-
-            if (board.every(value => value !== null)) {
-                drawCount++;
-                document.getElementById("draws").textContent = drawCount;
-                finishRound("It’s a draw!");
-                return;
-            }
-
-            currentPlayer = 1 - currentPlayer;
-            showTurn();
-        }
-
-        // Create the nine board buttons once and reuse them each round.
-        for (let index = 0; index < board.length; index++) {
-            const square = document.createElement("button");
-            square.type = "button";
-            square.className = "square";
-            square.setAttribute("aria-label", squareLabel(index, "empty"));
-            square.addEventListener("click", () => takeTurn(index));
-            boardElement.appendChild(square);
-            squares.push(square);
-        }
-
-        playAgain.addEventListener("click", () => {
-            board.fill(null);
-            startingPlayer = 1 - startingPlayer;
-            currentPlayer = startingPlayer;
-            roundOver = false;
-
-            squares.forEach((square, index) => {
-                square.textContent = "";
-                square.className = "square";
-                square.setAttribute("aria-label", squareLabel(index, "empty"));
-                square.removeAttribute("aria-disabled");
-            });
-
-            playAgain.hidden = true;
-            showTurn();
-            squares[0].focus();
+            serveCustomer();
+            answers.firstElementChild.focus();
         });
+
+        serveCustomer();
     </script>
 </body>
 </html>
